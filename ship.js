@@ -4,7 +4,6 @@ class Ship
     static LITTLE_THRUST = 5.0; 
     static MAX_SPEED = 600;
     static playerShip;
-    static score;
 
   static explosionSound;
  
@@ -107,7 +106,7 @@ shoot()
         this.bullet[this.nextBullet].x = this.sprite.x;
         this.bullet[this.nextBullet].y = this.sprite.y;
 
-        let speed = -500;
+        let speed = -2000;
        // if(this.enemy) {speed = -200;} // Gimp the enemies, to make them easier to dodge
 
 
@@ -172,7 +171,7 @@ update()
           {
             this.sprite.x = 300;
             this.sprite.y = -3000;
-            Ship.score += 100;
+            Ship.playerShip.score += 100;
 
            
           }

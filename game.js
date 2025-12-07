@@ -43,6 +43,7 @@ var pauseShade;
 var gameLogo;
 var scoreText;
 
+
 var boom;
 
 const state = {
@@ -94,6 +95,8 @@ function preload ()
     // load hit sounds
     this.load.audio('hitPlayerSound','sounds/hitPlayerSound.wav');
     this.load.audio('hitEnemySound','sounds/Laser_01.wav');
+
+    
 
 }
 
@@ -268,13 +271,16 @@ function create ()
     // Start game
     gameState = state.Menu;
     
+    // I am not sure why I have to play/pause these?
     menuMusic.play();
     menuMusic.pause();
 
     battleMusic.play();
     battleMusic.pause();
 
-    Ship.score = 0;
+    Ship.playerShip.score = 0;
+
+    console.log('VSCode git integration successful');
 
     
     
@@ -294,7 +300,7 @@ function update ()
    menuBack.tilePositionY -= 1;
 
 
-   scoreText.text = "Score: " + Ship.score;
+   scoreText.text = "Score: " + Ship.playerShip.score;
  
 
     if(gameState == state.Gameplay)
