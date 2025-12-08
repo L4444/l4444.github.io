@@ -1,6 +1,6 @@
 class Ship
 {
-    static BIG_THRUST = 2600;
+    static BIG_THRUST = 5000;
     static LITTLE_THRUST = 5.0; 
     static MAX_SPEED = 600;
     static playerShip;
@@ -47,6 +47,15 @@ constructor(engine,spriteName,x,y,isEnemy)
     this.sprite.body.setBounce(10,10); // Ships should bounce enough off each other to prevent "rubbing"
     
     this.sprite.setScale(0.5);
+
+    // This will be shown by the aux thruster
+    // Just setting the drag normally will lead to each axis being "slowed down" seperately
+    // So we use setDamping
+    this.sprite.setDamping(true); 
+    this.sprite.setDrag(0.2); 
+
+    // This prevents ships from flying off
+    this.sprite.body.setMaxSpeed(Ship.MAX_SPEED);
 
 
     this.isEnemy = isEnemy;
@@ -126,11 +135,19 @@ shoot()
 }
 left()
 {
-    this.tX = -Ship.BIG_THRUST;
+     let v = new Phaser.Math.Vector2(-Ship.BIG_THRUST /10 ,0);
+    v.rotate(Phaser.Math.DegToRad(this.sprite.angle));
+
+    this.tX = v.x;
+    this.tY = v.y;
 }
 right()
 {
-    this.tX = Ship.BIG_THRUST;
+     let v = new Phaser.Math.Vector2(Ship.BIG_THRUST/10,0);
+    v.rotate(Phaser.Math.DegToRad(this.sprite.angle));
+
+    this.tX = v.x;
+    this.tY = v.y;
 }
 forward()
 {
@@ -142,7 +159,11 @@ forward()
 }
 back()
 {
-    this.tY = Ship.BIG_THRUST;
+     let v = new Phaser.Math.Vector2(0,Ship.BIG_THRUST/10);
+    v.rotate(Phaser.Math.DegToRad(this.sprite.angle));
+
+    this.tX = v.x;
+    this.tY = v.y;
 }
 update()
 {
@@ -192,42 +213,7 @@ update()
     // If we aren't dead, regen HP slowly
     if(this.sprite.hp < 100) {this.sprite.hp += 0.1;}
 
-    // If we aren't using the big thruster, activate the little thruster to slow us down and prevent drift.... if our X velocity is really small, just 
-    // "apply the handbrake", setting velocity to zero
-    if(this.tX == 0)
-    {
-        if(Math.abs(this.sprite.body.velocity.x) > 1)
-        {
-            this.tX = this.sprite.body.velocity.x * -Ship.LITTLE_THRUST; 
-            
-        }
-        else
-        {
-            this.sprite.setVelocityX(0);
-            
-        }
-        
-    }
-    // Same as above, but for Y axis, not sure if I should make this into a function.
-    if(this.tY == 0)
-    {
-        if(Math.abs(this.sprite.body.velocity.y) > 1)
-        {
-            this.tY = this.sprite.body.velocity.y * -Ship.LITTLE_THRUST; 
-        }
-        else
-        {
-            this.sprite.setVelocityY(0);
-        }
-    
-    }
-     
-
-/// Speed cap
-   if(this.sprite.body.velocity.x > Ship.MAX_SPEED) {this.sprite.setVelocityX(Ship.MAX_SPEED);this.tX = 0;}
-   if(this.sprite.body.velocity.x < -Ship.MAX_SPEED) {this.sprite.setVelocityX(-Ship.MAX_SPEED);this.tX = 0;}
-   if(this.sprite.body.velocity.y > Ship.MAX_SPEED) {this.sprite.setVelocityY(Ship.MAX_SPEED);this.tY = 0;}
-   if(this.sprite.body.velocity.y < -Ship.MAX_SPEED) {this.sprite.setVelocityY(-Ship.MAX_SPEED);this.tY = 0;}
+  
     // Activate big thruster!
     this.sprite.setAcceleration(this.tX,this.tY);
 
@@ -247,15 +233,7 @@ doAI()
     if(this.sprite.x > 750) {this.spaceInvaderRight = false; }
     if(this.sprite.x < 150) {this.spaceInvaderRight = true; }
 
-    // disable moving/shooting for testing
-    //if(this.sprite.y < this.targetY -30) {this.back();}
-    //if(this.sprite.y > this.targetY+30) {this.forward();}
-
-
-    //if(Math.floor(Math.random() * 40) == 1 && this.sprite.y > 0)  {this.shoot();}
-    
-
-    //if(this.spaceInvaderRight) {this.right();} else {this.left();}
+  
 
 
     this.sprite.angle = Phaser.Math.RadToDeg(

@@ -118,7 +118,7 @@ function create ()
 
 
     background = this.add.tileSprite(500,500,1024,1024,'back');
-    background.setScrollFactor(0.1);
+    //background.setScrollFactor(0.1); Just for now, we're going to use the background for speed reference
     background.setScale(2);
 
 
