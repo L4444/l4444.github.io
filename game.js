@@ -1,5 +1,5 @@
 var config = {
-    type: Phaser.AUTO,
+    type: Phaser.WEBGL,
     width: 900,
     height: 900,
     physics: {
@@ -9,7 +9,7 @@ var config = {
                 y: 0,
                 width: 900,
                 height: 900,
-                //debug: true // Show the wireframes and velocity 
+                debug: true // Show the wireframes and velocity 
             }
         },
     scene: {
@@ -55,11 +55,11 @@ var gameState;
 
 function preload ()
 {
-    this.load.image('player','ships/player/blueship2.png');
-    this.load.image('enemy1','ships/empire/cargoship.png');
-    this.load.image('enemy2','ships/empire/carrier.png');
-    this.load.image('enemy3','ships/empire/cruiser.png');
-    this.load.image('enemy4','ships/empire/destroyer.png');
+    this.load.image('player','ships/player-2.png');
+    this.load.image('enemy1','ships/empire-d.png');
+    this.load.image('enemy2','ships/empire-d.png');
+    this.load.image('enemy3','ships/empire-d.png');
+    this.load.image('enemy4','ships/empire-d.png');
 
     this.load.image('back','Backgrounds/Blue Nebula/Blue Nebula 1 - 1024x1024.png');
     this.load.image('menuBack','Backgrounds/Green Nebula/Green Nebula 7 - 1024x1024.png');
@@ -119,6 +119,7 @@ function create ()
 
     background = this.add.tileSprite(500,500,1024,1024,'back');
     background.setScrollFactor(0.1);
+    background.setScale(2);
 
 
    
@@ -234,7 +235,7 @@ function create ()
     gameLogo = this.add.sprite(500,350,'logo'); 
     gameLogo.setScale(0.5);
 
-    keys = this.input.keyboard.addKeys('W,S,A,D,F,E,Q,UP,DOWN,SPACE,F1');
+    keys = this.input.keyboard.addKeys('W,S,A,D,F,E,Q,F,G,H,UP,DOWN,SPACE,F1');
     infoText = this.add.text(10,30,"");  infoText.setScrollFactor(0);
     helpText = this.add.text(10,10,"Press F1 to toggle help"); helpText.setScrollFactor(0);
     helpText.visible = false; // Don't show the help text in the menu.
@@ -285,6 +286,7 @@ function create ()
     // follow the player around and zoom out
     this.cameras.main.startFollow(Ship.playerShip.sprite);
     
+ 
 
     
 
@@ -319,7 +321,19 @@ function update ()
         
         if(game.input.mousePointer.buttons == 1) { player.shoot();}
 
-        // boom controls
+        // Zoom controls
+        if(keys.F.isDown)
+        {
+               this.cameras.main.setZoom(0.5);
+        }
+         if(keys.G.isDown)
+        {
+               this.cameras.main.setZoom(1);
+        }
+          if(keys.H.isDown)
+        {
+               this.cameras.main.setZoom(2);
+        }
         
 
             // Game design controls.
