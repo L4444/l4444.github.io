@@ -1,6 +1,6 @@
 class Ship
 {
-    static BIG_THRUST = 600;
+    static BIG_THRUST = 200;
     static LITTLE_THRUST = 5.0; 
     static MAX_SPEED = 600;
     static playerShip;
@@ -44,7 +44,7 @@ constructor(engine,spriteName,x,y,isEnemy)
     this.sprite.setCircle(w /2,0,h/2 - w/2);
     
 
-    this.sprite.body.setBounce(10,10); // Ships should bounce enough off each other to prevent "rubbing"
+    this.sprite.body.setBounce(1,1); // Ships should bounce enough off each other to prevent "rubbing"
     
     this.sprite.setScale(0.5);
 
@@ -116,7 +116,7 @@ shoot()
         this.bullet[this.nextBullet].x = this.sprite.x;
         this.bullet[this.nextBullet].y = this.sprite.y;
 
-        let speed = -2000;
+        let speed = -400;
        // if(this.enemy) {speed = -200;} // Gimp the enemies, to make them easier to dodge
 
 
