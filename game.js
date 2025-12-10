@@ -22,7 +22,8 @@ var config = {
 var game = new Phaser.Game(config);
 var player;
 var enemy = [];
-var background;
+var background = [];
+var asteroid;
 
 var keys;
 
@@ -62,9 +63,10 @@ function preload() {
     this.load.image('enemy3', 'ships/empire-d.png');
     this.load.image('enemy4', 'ships/empire-d.png');
 
-    this.load.image('back', 'Backgrounds/Blue Nebula/Blue Nebula 1 - 1024x1024.png');
-    this.load.image('menuBack', 'Backgrounds/Green Nebula/Green Nebula 7 - 1024x1024.png');
+    this.load.image('back', 'backgrounds/Blue Nebula/Blue Nebula 1 - 1024x1024.png');
+    this.load.image('menuBack', 'backgrounds/Green Nebula/Green Nebula 7 - 1024x1024.png');
     this.load.image('logo', 'Ratspace Logo.png');
+    this.load.image('asteroid', 'asteroids/Asteroid.png');
 
 
     this.load.image('pew', 'pew.png');
@@ -95,7 +97,7 @@ function preload() {
     this.load.audio('hitPlayerSound', 'sounds/hitPlayerSound.wav');
     this.load.audio('hitEnemySound', 'sounds/Laser_01.wav');
 
-
+    console.log("Preloading done");
 
 }
 
@@ -112,16 +114,25 @@ function create() {
 
 
 
+    // Create the parallax backgrounds, tile them together in 3x3 grid to make them look seamless.
+    for( var i = 0; i < 9; i++) {
+        var x =  i % 3;
+        var y = Math.floor(i / 3);
 
-    background = this.add.tileSprite(500, 500, 1024, 1024, 'back');
-    //background.setScrollFactor(0.1); Just for now, we're going to use the background for speed reference
-    background.setScale(4);
+        background[i] = this.add.tileSprite(x * 1024, y * 1024, 1024, 1024, 'back');
 
+        // Don't forget to add scroll factor back to make it paralax
+        background[i].setScrollFactor(0.5);
 
+    }
+    
 
-
-
-
+    // Create an asteroid to help player orient themselves
+    asteroid = this.physics.add.sprite(1000, 1500, 'asteroid');
+    let  r= 150;
+    asteroid.setCircle(r,110,100);
+    
+    
 
     // Create music objects
     menuMusic = this.sound.add('menu', { loop: true });
@@ -144,7 +155,7 @@ function create() {
 
 
 
-    player = new Ship(this, 'player', 460, 840, false);
+    player = new Ship(this, 'player', 1000, 1200, false);
 
     Ship.playerShip = player;
 
@@ -156,11 +167,16 @@ function create() {
 
     }
 
+    // collide with asteroid
+    this.physics.add.collider(player.sprite, asteroid, function (pShip, eShip, body1, body2) {
+            console.log("huh???");
+        });
+
 
 
     for (let i = 0; i < 4; i++) {
 
-        enemy[i] = new Ship(this, 'enemy' + (i + 1), 300, i * 130 + 80, true);
+        enemy[i] = new Ship(this, 'enemy' + (i + 1), 1000 + (i * 200), 1000, true);
 
 
 
@@ -269,7 +285,7 @@ function create() {
 
     Ship.playerShip.score = 0;
 
-    console.log('VSCode git integration successful');
+    console.log('Objects created');
 
 
 
@@ -349,6 +365,10 @@ function update() {
             + "\nleft click for shoot \n1 for menu music \n2 for battle music \n3 for stealth music \n4 for boss music \nUP, DOWN, E and Q to play with physics");
 
 
+
+
+            //update the asteroids
+        asteroid.angle += 0.2;
 
         player.update();
 

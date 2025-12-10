@@ -38,7 +38,7 @@ class Ship {
         let w = this.sprite.displayWidth;
         let h = this.sprite.displayHeight;
 
-        //this.sprite.setCircle(w /4,0,h - w);
+        // TODO: Adjust this to account for different image sizes
         this.sprite.setCircle(w / 4, w / 4, h / 4);
 
 
