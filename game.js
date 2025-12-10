@@ -121,7 +121,7 @@ function create ()
 
     background = this.add.tileSprite(500,500,1024,1024,'back');
     //background.setScrollFactor(0.1); Just for now, we're going to use the background for speed reference
-    background.setScale(2);
+    background.setScale(4);
 
 
    
@@ -234,8 +234,8 @@ function create ()
     pauseShade = this.add.rectangle(0, 0, 2000, 2000, 0x336633, .25); 
     pauseShade.visible = false;
 
-    gameLogo = this.add.sprite(500,350,'logo'); 
-    gameLogo.setScale(0.5);
+    gameLogo = this.add.sprite(450,350,'logo'); 
+    
 
     keys = this.input.keyboard.addKeys('W,S,A,D,F,E,Q,F,G,H,UP,DOWN,SPACE,F1');
     infoText = this.add.text(10,30,"");  infoText.setScrollFactor(0);
@@ -358,7 +358,15 @@ function update ()
         
 
         // TEST: Just set it
-        player.sprite.angle = targetAngle;
+        //player.sprite.angle = targetAngle;
+
+        if(targetAngle < 180)
+        {
+
+        if(player.sprite.angle > targetAngle + 1) {player.sprite.angle -= 1;}
+        if(player.sprite.angle < targetAngle - 1) {player.sprite.angle += 1;}
+
+        }
 
         let cursorX = game.input.mousePointer.x;
         let cursorY = game.input.mousePointer.y;

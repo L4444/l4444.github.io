@@ -2,7 +2,7 @@ class Ship
 {
     static BIG_THRUST = 200;
     static LITTLE_THRUST = 5.0; 
-    static MAX_SPEED = 600;
+    static MAX_SPEED = 200;
     static playerShip;
 
   static explosionSound;
@@ -41,18 +41,18 @@ constructor(engine,spriteName,x,y,isEnemy)
     let w = this.sprite.displayWidth;
     let h = this.sprite.displayHeight;
 
-    this.sprite.setCircle(w /2,0,h/2 - w/2);
+    //this.sprite.setCircle(w /4,0,h - w);
+    this.sprite.setCircle(w /4,w/4,h/4);
     
 
     this.sprite.body.setBounce(1,1); // Ships should bounce enough off each other to prevent "rubbing"
     
-    this.sprite.setScale(0.5);
 
     // This will be shown by the aux thruster
     // Just setting the drag normally will lead to each axis being "slowed down" seperately
     // So we use setDamping
-    this.sprite.setDamping(true); 
-    this.sprite.setDrag(0.2); 
+    //this.sprite.setDamping(true); 
+    //this.sprite.setDrag(0.2); 
 
     // This prevents ships from moving at a speed that the player cannot control
     this.sprite.body.setMaxSpeed(Ship.MAX_SPEED);
