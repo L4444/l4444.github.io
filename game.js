@@ -56,12 +56,12 @@ const state = {
 
 var gameState;
 
-const infoMode = {
-    Debug: 'Debug',
-    Help: 'Help',
-    Physics: 'Physics',
-    Particles: 'Particles'
-}
+var infoMode = 1;
+
+
+var flame;
+var particleContainer;
+var thruster;
 
 function preload() {
     this.load.image('player', 'ships/player-2.png');
@@ -75,6 +75,8 @@ function preload() {
     this.load.image('logo', 'Ratspace Logo.png');
     this.load.image('asteroid', 'asteroids/Asteroid.png');
 
+
+    this.load.image('flare','particles/flare.png');
 
     this.load.image('pew', 'pew.png');
 
@@ -103,6 +105,9 @@ function preload() {
     // load hit sounds
     this.load.audio('hitPlayerSound', 'sounds/hitPlayerSound.wav');
     this.load.audio('hitEnemySound', 'sounds/Laser_01.wav');
+
+
+    
 
     console.log("Preloading done");
 
@@ -148,7 +153,7 @@ function create() {
     battleMusic.volume = 0.1;
 
     sneakMusic = this.sound.add('sneak', { loop: true });
-    sneakMusic.volume = 0.2;
+    sneakMusic.volume = 0.3;
 
     bossMusic = this.sound.add('boss', { loop: true });
     bossMusic.volume = 0.1;
@@ -160,11 +165,17 @@ function create() {
     this.anims.create({ key: 'explode', frames: f, frameRate: 30, repeat: 0 });
 
 
-
+    
 
     player = new Ship(this, 'player', 1000, 1200, false);
 
     Ship.playerShip = player;
+
+
+    
+
+
+
 
     // Prepare the explosion sounds.
     Ship.explosionSound = [];
@@ -176,7 +187,7 @@ function create() {
 
     // collide with asteroid
     this.physics.add.collider(player.sprite, asteroid, function (pShip, eShip, body1, body2) {
-            console.log("huh???");
+            console.log("Player hit asteroid ");
         });
 
 
@@ -250,7 +261,7 @@ function create() {
 
     keys = this.input.keyboard.addKeys('W,S,A,D,F,E,Q,F,G,H,UP,DOWN,SPACE,F1');
     infoText = this.add.text(10, 30, ""); infoText.setScrollFactor(0);
-    helpText = this.add.text(10, 10, "Press F1 to toggle help"); helpText.setScrollFactor(0);
+    helpText = this.add.text(10, 10, "Press F1 to cycle through help menus"); helpText.setScrollFactor(0);
     helpText.visible = false; // Don't show the help text in the menu.
 
 
@@ -259,13 +270,23 @@ function create() {
     scoreText = this.add.text(750, 10, ""); scoreText.setScrollFactor(0);
 
 
+    
 
 
 
     // Toggle the help for controls and debug. Also control music
-    this.input.keyboard.on('keyup-F1', function (event) { infoText.visible = !infoText.visible; })
-    this.input.keyboard.on('keyup-F1', function (event) { infoText.visible = !infoText.visible; })
-    this.input.keyboard.on('keyup-F1', function (event) { infoText.visible = !infoText.visible; })
+    this.input.keyboard.on('keyup-F1', function (event) { 
+
+      if(infoMode < 3)
+      {
+        infoMode++;
+      }
+      else
+      {
+        infoMode = 1;
+      }
+    })
+    
     this.input.keyboard.on('keyup-ONE', function (event) { if (!menuMusic.isPlaying) { this.game.sound.stopAll(); menuMusic.play(); } })
     this.input.keyboard.on('keyup-TWO', function (event) { if (!battleMusic.isPlaying) { this.game.sound.stopAll(); battleMusic.play(); } })
     this.input.keyboard.on('keyup-THREE', function (event) { if (!sneakMusic.isPlaying) { this.game.sound.stopAll(); sneakMusic.play(); } })
@@ -283,36 +304,40 @@ function create() {
         }
 
     });
-    this.input.keyboard.on('keyup-SPACE', function (event) {
+    this.input.keyboard.on('keyup-LEFT', function (event) {
+
+        Ship.BIG_THRUST -= 20;
+
+    });
+
+     this.input.keyboard.on('keyup-RIGHT', function (event) {
+
+        Ship.BIG_THRUST += 20; 
+
+    });
+     this.input.keyboard.on('keyup-UP', function (event) {
+        Ship.MAX_SPEED += 20;
 
 
 
     });
-
-     this.input.keyboard.on('keyup-SPACE', function (event) {
-
-
-
-    });
-     this.input.keyboard.on('keyup-SPACE', function (event) {
-
+     this.input.keyboard.on('keyup-DOWN', function (event) {
+        Ship.MAX_SPEED -= 20;
 
 
     });
-     this.input.keyboard.on('keyup-SPACE', function (event) {
-
+     this.input.keyboard.on('keyup-F', function (event) {
+        
 
 
     });
-     this.input.keyboard.on('keyup-SPACE', function (event) {
-
+        this.input.keyboard.on('keyup-G', function (event) {
+        
 
 
     });
 
       // Game design controls.
-        if (keys.UP.isDown) { Ship.BIG_THRUST += 100; }
-        if (keys.DOWN.isDown) { Ship.BIG_THRUST -= 100; }
         if (keys.E.isDown) { Ship.LITTLE_THRUST += 0.1;; }
         if (keys.Q.isDown) { Ship.LITTLE_THRUST -= 0.1; }
 
@@ -329,13 +354,6 @@ function create() {
     Ship.playerShip.score = 0;
 
     console.log('Objects created');
-
-
-
-
-
-
-
 
 }
 
@@ -354,7 +372,7 @@ function update() {
 
     if (gameState == state.Gameplay) {
 
-        // Basic controls, BIG thrust is the engine that player directly controls, LITTLE thrust is for indirectly controlled to prevent drift.
+        // Basic controls, BIG thrust is the engine that player directly controls
         if (keys.D.isDown) { player.right(); }
         if (keys.A.isDown) { player.left(); }
 
@@ -362,17 +380,6 @@ function update() {
         if (keys.S.isDown) { player.back(); }
 
         if (game.input.mousePointer.buttons == 1) { player.shoot(); }
-
-        // Zoom controls
-        if (keys.F.isDown) {
-
-        }
-        if (keys.G.isDown) {
-
-        }
-        if (keys.H.isDown) {
-
-        }
 
 
       
@@ -391,16 +398,39 @@ function update() {
         let turnSpeed = 0.02;
         player.sprite.rotation = Phaser.Math.Angle.RotateTo(player.sprite.rotation, targetAngle, turnSpeed);
 
-
-
         // Present debug info
-        infoText.setText("Big thrust is " + Ship.BIG_THRUST + "\nand Little thrust is " + Ship.LITTLE_THRUST
-            + "\nVelX = " + player.sprite.body.velocity.x + "\nVelY = " + player.sprite.body.velocity.y +
-            "\ntX: " + player.tX + "\ntY: " + player.tY +
-            "\nCursorX: " + cursorX + "\nCursorY: " + cursorY +
-            "\ntargetAngle: " + targetAngle + "\nPlayer Angle: " + player.sprite.angle +
-            "\nMousebuttons: " + game.input.mousePointer.buttons + "\n------------Controls---------- \nW,S,A,D for movement"
-            + "\nleft click for shoot \n1 for menu music \n2 for battle music \n3 for stealth music \n4 for boss music \nUP, DOWN, E and Q to play with physics");
+        switch(infoMode)
+        {
+            case 1: 
+
+                infoText.setText("-----------Controls-----------\n" 
+                    + "W,S,A,D for movement\n"
+                + " Left click for shoot\n" 
+                + "1 for menu music \n2 for battle music \n3 for stealth music \n4 for boss music");
+                  
+                break;
+            case 2:
+                infoText.setText("-------------DEBUG-------------\n" 
+                    + "(LEFT / RIGHT) Big thrust is " + Ship.BIG_THRUST + "\n"
+                    + "(UP / DOWN) Max Speed is " + Ship.MAX_SPEED + "\n"
+                + "VelX = " + player.sprite.body.velocity.x + "\nVelY = " + player.sprite.body.velocity.y +
+                "\ntX: " + player.tX + "\ntY: " + player.tY +
+                "\nCursorX: " + cursorX + "\nCursorY: " + cursorY +
+                "\ntargetAngle: " + targetAngle + "\nPlayer Angle: " + player.sprite.angle +
+                "\nMousebuttons: " + game.input.mousePointer.buttons + "\n" + 
+                "Player X: " + player.sprite.x + "\n" +
+                "Palyer Y: " + player.sprite.y + "\n");
+                break;
+
+            case 3:
+                infoText.setText("-----------PARTICLES-----------");
+                break;
+
+
+        }
+
+        
+       
 
 
 

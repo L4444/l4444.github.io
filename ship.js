@@ -30,6 +30,30 @@ class Ship {
         this.lastTick = -500;
 
 
+        // Particle thrust effect
+        this.particleContainer = engine.add.container(0, 0);
+
+        this.flame = engine.add.particles('flare');
+
+        this.thruster = this.flame.createEmitter({
+            x: 0,
+            y: 0,
+            //color: [0xfacc22, 0xf89800, 0xf83600, 0x9f0404],
+            color: [0xff0000],
+            colorEase: 'quad.out',
+            lifespan: 200,
+            //angle: { min: -100, max: -80 },
+            angle: -90,
+            scale: { start: 0.20, end: 0.10, ease: 'sine.out' },
+            alpha: { start: 1, end: 0},
+            //accelerationY: 800,
+            speed: 300,
+            advance: 2000,
+            blendMode: 'ADD'
+        });
+        this.particleContainer.add(this.flame);
+
+
         // The actual ship's sprite 
         this.sprite = engine.physics.add.sprite(x, y, spriteName);
 
@@ -44,15 +68,6 @@ class Ship {
 
         this.sprite.body.setBounce(1, 1); // Ships should bounce enough off each other to prevent "rubbing"
 
-
-        // This will be shown by the aux thruster
-        // Just setting the drag normally will lead to each axis being "slowed down" seperately
-        // So we use setDamping
-        //this.sprite.setDamping(true); 
-        //this.sprite.setDrag(0.2); 
-
-        // This prevents ships from moving at a speed that the player cannot control
-        this.sprite.body.setMaxSpeed(Ship.MAX_SPEED);
 
 
         this.isEnemy = isEnemy;
@@ -110,11 +125,11 @@ class Ship {
             this.bullet[this.nextBullet].x = this.sprite.x;
             this.bullet[this.nextBullet].y = this.sprite.y;
 
-            let speed = -400;
+            let speed = -800;
             // if(this.enemy) {speed = -200;} // Gimp the enemies, to make them easier to dodge
 
             // Use vectors to set the path of the bullet, use the X axis to align with the player ship.
-            let v = new Phaser.Math.Vector2(-speed,0);
+            let v = new Phaser.Math.Vector2(-speed, 0);
             v.rotate(this.sprite.rotation);
 
             this.bullet[this.nextBullet].setVelocity(v.x, v.y);
@@ -164,6 +179,22 @@ class Ship {
 
         this.sprite.tint = '0xFF' + this.sprite.tintTick.toString(16) + 'FF';
 
+        // Testers can alter the ship's max speed while game is running
+        this.sprite.body.setMaxSpeed(Ship.MAX_SPEED);
+
+       
+        
+
+        // TODO: clean this up
+        // If the any thruster is active (e.g. player presses any keys) activate the particle effected
+        if (this.tY != 0) {
+            this.thruster.start(); 
+            
+        }
+        else {
+            this.thruster.stop(); 
+        }
+
 
 
         if (this.isEnemy) { this.doAI(); }
@@ -206,9 +237,23 @@ class Ship {
         // Tick the clock (useful for limiting bullet firing)
         this.clock++;
 
+         // move thruster with ship
+        let thr = new Phaser.Math.Vector2(-62,0);
+        thr.rotate(this.sprite.rotation);
+
+        /// move the container that the emitter and particles are in with the ship
+        // "thr" here allows the emitter's position to rotate with the ship
+        // finally, you need to give the container (and by extension the emitter) 1 "tick" of 
+        // the ship's velocity in order to prevent a VERY strange issue where the emitter
+        // misaligns with the ship slightly
+        this.particleContainer.x = this.sprite.x + thr.x + this.sprite.body.velocity.x /60;
+        this.particleContainer.y = this.sprite.y + thr.y + this.sprite.body.velocity.y /60;
+        this.particleContainer.angle = this.sprite.angle - 90;
 
         this.tX = 0;
         this.tY = 0;
+
+        
 
 
 
