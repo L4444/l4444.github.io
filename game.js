@@ -56,6 +56,13 @@ const state = {
 
 var gameState;
 
+const infoMode = {
+    Debug: 'Debug',
+    Help: 'Help',
+    Physics: 'Physics',
+    Particles: 'Particles'
+}
+
 function preload() {
     this.load.image('player', 'ships/player-2.png');
     this.load.image('enemy1', 'ships/empire-d.png');
@@ -245,6 +252,8 @@ function create() {
     infoText = this.add.text(10, 30, ""); infoText.setScrollFactor(0);
     helpText = this.add.text(10, 10, "Press F1 to toggle help"); helpText.setScrollFactor(0);
     helpText.visible = false; // Don't show the help text in the menu.
+
+
     pauseText = this.add.text(400, 400, "Paused - Press escape to unpause"); pauseText.setScrollFactor(0);
 
     scoreText = this.add.text(750, 10, ""); scoreText.setScrollFactor(0);
@@ -254,6 +263,8 @@ function create() {
 
 
     // Toggle the help for controls and debug. Also control music
+    this.input.keyboard.on('keyup-F1', function (event) { infoText.visible = !infoText.visible; })
+    this.input.keyboard.on('keyup-F1', function (event) { infoText.visible = !infoText.visible; })
     this.input.keyboard.on('keyup-F1', function (event) { infoText.visible = !infoText.visible; })
     this.input.keyboard.on('keyup-ONE', function (event) { if (!menuMusic.isPlaying) { this.game.sound.stopAll(); menuMusic.play(); } })
     this.input.keyboard.on('keyup-TWO', function (event) { if (!battleMusic.isPlaying) { this.game.sound.stopAll(); battleMusic.play(); } })
@@ -278,9 +289,41 @@ function create() {
 
     });
 
+     this.input.keyboard.on('keyup-SPACE', function (event) {
+
+
+
+    });
+     this.input.keyboard.on('keyup-SPACE', function (event) {
+
+
+
+    });
+     this.input.keyboard.on('keyup-SPACE', function (event) {
+
+
+
+    });
+     this.input.keyboard.on('keyup-SPACE', function (event) {
+
+
+
+    });
+
+      // Game design controls.
+        if (keys.UP.isDown) { Ship.BIG_THRUST += 100; }
+        if (keys.DOWN.isDown) { Ship.BIG_THRUST -= 100; }
+        if (keys.E.isDown) { Ship.LITTLE_THRUST += 0.1;; }
+        if (keys.Q.isDown) { Ship.LITTLE_THRUST -= 0.1; }
+
+
 
     // Start game
     gameState = state.Menu;
+
+    // Start in game
+    resumeGame();
+    
 
 
     Ship.playerShip.score = 0;
@@ -332,12 +375,7 @@ function update() {
         }
 
 
-        // Game design controls.
-        if (keys.UP.isDown) { Ship.BIG_THRUST += 100; }
-        if (keys.DOWN.isDown) { Ship.BIG_THRUST -= 100; }
-        if (keys.E.isDown) { Ship.LITTLE_THRUST += 0.1;; }
-        if (keys.Q.isDown) { Ship.LITTLE_THRUST -= 0.1; }
-
+      
 
         let cursorX = game.input.mousePointer.x;
         let cursorY = game.input.mousePointer.y;
@@ -347,7 +385,7 @@ function update() {
 
 
         // 2. Add half a radian to rotate by 90 degrees (so you face the right direction)
-        targetAngle += Math.PI / 2;
+        //targetAngle += Math.PI / 2;
 
         // 3. Rotate smoothly to that angle
         let turnSpeed = 0.02;

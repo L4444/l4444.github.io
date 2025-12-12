@@ -113,12 +113,12 @@ class Ship {
             let speed = -400;
             // if(this.enemy) {speed = -200;} // Gimp the enemies, to make them easier to dodge
 
-
-            let v = new Phaser.Math.Vector2(0, speed);
-            v.rotate(Phaser.Math.DegToRad(this.sprite.angle));
+            // Use vectors to set the path of the bullet, use the X axis to align with the player ship.
+            let v = new Phaser.Math.Vector2(-speed,0);
+            v.rotate(this.sprite.rotation);
 
             this.bullet[this.nextBullet].setVelocity(v.x, v.y);
-            this.bullet[this.nextBullet].angle = this.sprite.angle;
+            this.bullet[this.nextBullet].rotation = this.sprite.rotation;
 
             if (this.nextBullet < this.bullet.length - 1) { this.nextBullet++; } else { this.nextBullet = 0; }
 
@@ -128,28 +128,28 @@ class Ship {
 
     }
     left() {
-        let v = new Phaser.Math.Vector2(-Ship.BIG_THRUST, 0);
-        v.rotate(Phaser.Math.DegToRad(this.sprite.angle));
-
-        this.tX += v.x;
-        this.tY += v.y;
-    }
-    right() {
-        let v = new Phaser.Math.Vector2(Ship.BIG_THRUST, 0);
-        v.rotate(Phaser.Math.DegToRad(this.sprite.angle));
-
-        this.tX += v.x;
-        this.tY += v.y;
-    }
-    forward() {
         let v = new Phaser.Math.Vector2(0, -Ship.BIG_THRUST);
         v.rotate(Phaser.Math.DegToRad(this.sprite.angle));
 
         this.tX += v.x;
         this.tY += v.y;
     }
-    back() {
+    right() {
         let v = new Phaser.Math.Vector2(0, Ship.BIG_THRUST);
+        v.rotate(Phaser.Math.DegToRad(this.sprite.angle));
+
+        this.tX += v.x;
+        this.tY += v.y;
+    }
+    forward() {
+        let v = new Phaser.Math.Vector2(Ship.BIG_THRUST, 0);
+        v.rotate(Phaser.Math.DegToRad(this.sprite.angle));
+
+        this.tX += v.x;
+        this.tY += v.y;
+    }
+    back() {
+        let v = new Phaser.Math.Vector2(-Ship.BIG_THRUST, 0);
         v.rotate(Phaser.Math.DegToRad(this.sprite.angle));
 
         this.tX += v.x;
