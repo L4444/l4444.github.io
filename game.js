@@ -381,22 +381,31 @@ function update() {
 
         if (game.input.mousePointer.buttons == 1) { player.shoot(); }
 
-
+    let cursorX = game.input.mousePointer.x;
+        let cursorY = game.input.mousePointer.y;
       
 
-        let cursorX = game.input.mousePointer.x;
-        let cursorY = game.input.mousePointer.y;
+       /* 
 
         // 1. Convert vector to target angle
-        let targetAngle = Phaser.Math.Angle.Between(450, 450, cursorX, cursorY);
+        let targetAngle = Phaser.Math.Angle.Between(450 , 450 , cursorX, cursorY);
 
 
-        // 2. Add half a radian to rotate by 90 degrees (so you face the right direction)
-        //targetAngle += Math.PI / 2;
+*/
 
-        // 3. Rotate smoothly to that angle
+        /// 1. chat gpt
+        let pointer = this.input.activePointer;
+        let worldCursor = pointer.positionToCamera(this.cameras.main);
+       
+        let targetAngle = Phaser.Math.Angle.Between(player.sprite.x , player.sprite.y , worldCursor.x, worldCursor.y);
+
+        // Turn to face the targetAngle
         let turnSpeed = 0.02;
         player.sprite.rotation = Phaser.Math.Angle.RotateTo(player.sprite.rotation, targetAngle, turnSpeed);
+
+
+
+
 
         // Present debug info
         switch(infoMode)
@@ -416,10 +425,10 @@ function update() {
                 + "VelX = " + player.sprite.body.velocity.x + "\nVelY = " + player.sprite.body.velocity.y +
                 "\ntX: " + player.tX + "\ntY: " + player.tY +
                 "\nCursorX: " + cursorX + "\nCursorY: " + cursorY +
-                "\ntargetAngle: " + targetAngle + "\nPlayer Angle: " + player.sprite.angle +
+                "\ntargetAngle: " + targetAngle + "\nPlayer Angle: " + player.sprite.rotation +
                 "\nMousebuttons: " + game.input.mousePointer.buttons + "\n" + 
                 "Player X: " + player.sprite.x + "\n" +
-                "Palyer Y: " + player.sprite.y + "\n");
+                "Player Y: " + player.sprite.y + "\n");
                 break;
 
             case 3:
