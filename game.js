@@ -33,10 +33,6 @@ var battleMusic;
 var sneakMusic;
 var bossMusic;
 
-var shootSound;
-
-
-
 var infoText;
 var helpText;
 var pauseText;
@@ -57,11 +53,6 @@ const state = {
 var gameState;
 
 var infoMode = 1;
-
-
-var flame;
-var particleContainer;
-var thruster;
 
 function preload() {
     this.load.image('player', 'ships/player-2.png');
@@ -337,10 +328,6 @@ function create() {
 
     });
 
-      // Game design controls.
-        if (keys.E.isDown) { Ship.LITTLE_THRUST += 0.1;; }
-        if (keys.Q.isDown) { Ship.LITTLE_THRUST -= 0.1; }
-
 
 
     // Start game
@@ -385,15 +372,11 @@ function update() {
         let cursorY = game.input.mousePointer.y;
       
 
-       /* 
-
-        // 1. Convert vector to target angle
-        let targetAngle = Phaser.Math.Angle.Between(450 , 450 , cursorX, cursorY);
 
 
-*/
-
-        /// 1. chat gpt
+        /// Make the player face the mouse pointer.
+        /// Chat gpt helped me with this, 
+        // Get the mouse position and convert it to worldCoordinates
         let pointer = this.input.activePointer;
         let worldCursor = pointer.positionToCamera(this.cameras.main);
        
@@ -405,9 +388,7 @@ function update() {
 
 
 
-
-
-        // Present debug info
+        // Present the various types of info in text box 
         switch(infoMode)
         {
             case 1: 
