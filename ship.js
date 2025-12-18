@@ -9,19 +9,19 @@ class Ship extends Phaser.Physics.Arcade.Sprite {
 
 
 
-    constructor(engine, spriteName, x, y, isEnemy) {
+    constructor(scene, spriteName, x, y, isEnemy) {
 
-        super(engine, x,y,spriteName);
+        super(scene, x,y,spriteName);
 
         // Manually add ship to scene and physics (contrustor doesn't do this for us)
-        engine.add.existing(this);
-        engine.physics.add.existing(this); 
+        scene.add.existing(this);
+        scene.physics.add.existing(this); 
 
         // The bullet sprites (Note that I intialise this before the ship 
         // so that the bullets spawn obscured by the ship sprite)
         this.bullet = [];
         for (let i = 0; i < 10; i++) {
-            this.bullet[i] = engine.physics.add.sprite(x, y, "pew").setCircle(256 / 2, 0, 256 / 2 - 256 / 2);
+            this.bullet[i] = scene.physics.add.sprite(x, y, "pew").setCircle(256 / 2, 0, 256 / 2 - 256 / 2);
             if (isEnemy) { this.bullet[i].tint = 0xFF6666; }
             this.bullet[i].setScale(0.25);
             this.bullet[i].x = -9999;
@@ -37,9 +37,9 @@ class Ship extends Phaser.Physics.Arcade.Sprite {
 
 
         // Particle thrust effect
-        this.particleContainer = engine.add.container(0, 0);
+        this.particleContainer = scene.add.container(0, 0);
 
-        this.flame = engine.add.particles('flare');
+        this.flame = scene.add.particles('flare');
 
         this.thruster = this.flame.createEmitter({
             x: 0,
@@ -58,11 +58,6 @@ class Ship extends Phaser.Physics.Arcade.Sprite {
             blendMode: 'ADD'
         });
         this.particleContainer.add(this.flame);
-
-
-        // The actual ship's sprite 
-        //this.sprite = engine.physics.add.sprite(x, y, spriteName);
-
 
         // -- Get the measurements of the ship spread and create a hit circle 
         let w = this.displayWidth;
@@ -96,15 +91,15 @@ class Ship extends Phaser.Physics.Arcade.Sprite {
 
 
         if (isEnemy) {
-            this.shootSound = engine.sound.add('shoot2', { loop: false });
+            this.shootSound = scene.sound.add('shoot2', { loop: false });
             /// Workaround, tie the hitsound to the sprite so it can be called in the collision detection code
-            this.hitSound = engine.sound.add('hitEnemySound', { loop: false });
+            this.hitSound = scene.sound.add('hitEnemySound', { loop: false });
             this.hitSound.volume = 0.1;
         }
         else {
-            this.shootSound = engine.sound.add('shoot1', { loop: false });
+            this.shootSound = scene.sound.add('shoot1', { loop: false });
             /// Workaround, tie the hitsound to the sprite so it can be called in the collision detection code
-            this.hitSound = engine.sound.add('hitPlayerSound', { loop: false });
+            this.hitSound = scene.sound.add('hitPlayerSound', { loop: false });
         }
 
 
@@ -112,10 +107,10 @@ class Ship extends Phaser.Physics.Arcade.Sprite {
 
         // set hp
         this.hp = 100;
-        this.hpBarBack = engine.add.rectangle(0, 0, this.displayWidth, 10, 0x000000, 1);
-        this.hpBarFront = engine.add.rectangle(0, 0, this.displayWidth, 5, 0x336633, 1);
+        this.hpBarBack = scene.add.rectangle(0, 0, this.displayWidth, 10, 0x000000, 1);
+        this.hpBarFront = scene.add.rectangle(0, 0, this.displayWidth, 5, 0x336633, 1);
         // Setup explosion effect
-        this.explosion = engine.add.sprite(-9999, -9999, 'boom14');
+        this.explosion = scene.add.sprite(-9999, -9999, 'boom14');
         this.explosion.setScale(0.5);
 
 
