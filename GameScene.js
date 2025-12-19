@@ -148,64 +148,18 @@ class GameScene extends Phaser.Scene {
         });
 
 
-        this.enemy = [];
+        this.enemies = [];
         for (let i = 0; i < 4; i++) {
 
-            this.enemy[i] = new Ship(this, 'enemy' + (i + 1), 1000 + (i * 200), 1000, true);
-
-
-
-            // Collide with the player
-            this.physics.add.collider(this.#player, this.enemy[i], function (pShip, eShip, body1, body2) {
-                pShip.hp -= 10; eShip.hp -= 10;
-                if (pShip.hp > 0) { pShip.hitSound.play(); }
-            });
+            this.enemies[i] = new Ship(this, 'enemy' + (i + 1), 1000 + (i * 200), 1000, true);
 
         }
 
-        // Collide with other enemies
-        for (let i = 0; i < this.enemy.length; i++) {
-            for (let j = i; j < this.enemy.length; j++) {
-                this.physics.add.collider(this.enemy[i], this.enemy[j], function (aShip, bShip, body1, body2) {
-                    //aShip.hp -= 5; bShip.hp -= 5; 
-                    console.log('one bounce');
+        this.collisionManager = new CollisionMananger(this, this.#player, this.enemies);
 
-                });
-            }
-        }
 
-        // Add collision detection for Enemy bullets vs player
-        for (let i = 0; i < this.enemy.length; i++) {
 
-            for (let j = 0; j < this.enemy[i].bullet.length; j++) {
-                this.physics.add.overlap(this.#player, this.enemy[i].bullet[j], function (hitShip, hitBullet, body1, body2) {
-                    console.log('Player hit');
-                    hitShip.tintTick = 0;
-                    hitShip.hp -= 20;
-                    //if(hitShip.hp > 0) {hitShip.hitSound.play();} /// This is a horrible sound
-                    hitBullet.x = -9999; hitBullet.y = -9999;
-                    hitShip.setVelocity(hitBullet.body.velocity.x, hitBullet.body.velocity.y);
-                    hitBullet.setVelocity(0, 0);
-                });
-            }
-
-        }
-
-        // Finally, add collision detection for Player bullets vs enemies
-        for (let i = 0; i < this.enemy.length; i++) {
-
-            for (let j = 0; j < this.#player.bullet.length; j++) {
-                this.physics.add.overlap(this.enemy[i], this.#player.bullet[j], function (hitShip, hitBullet, body1, body2) {
-                    console.log('Enemy hit');
-                    hitShip.tintTick = 0;
-                    hitShip.hp -= 50;
-                    if (hitShip.hp > 0) { hitShip.hitSound.play(); }
-                    hitBullet.x = -9999; hitBullet.y = -9999;
-                    hitShip.setVelocity(hitBullet.body.velocity.x / 10, hitBullet.body.velocity.y / 10);
-                    hitBullet.setVelocity(0, 0);
-                });
-            }
-        }
+        
 
 
         // The pause menu
@@ -379,9 +333,9 @@ class GameScene extends Phaser.Scene {
 
 
 
-            for (let i = 0; i < this.enemy.length; i++) {
+            for (let i = 0; i < this.enemies.length; i++) {
 
-                this.enemy[i].update();
+                this.enemies[i].update();
 
             }
 
