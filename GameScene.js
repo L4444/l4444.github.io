@@ -1,5 +1,6 @@
 class GameScene extends Phaser.Scene {
 
+    #player = null;
     constructor() {
         super('GameScene');
 
@@ -122,10 +123,10 @@ class GameScene extends Phaser.Scene {
 
 
 
-        this._player = new Ship(this, 'player', 1000, 1200, false);
-        this.playerInput = new PlayerInput(this,this._player);
+        this.#player = new Ship(this, 'player', 1000, 1200, false);
+        this.playerInput = new PlayerInput(this,this.#player);
 
-        Ship.playerShip = this._player;
+        Ship.playerShip = this.#player;
 
 
 
@@ -142,7 +143,7 @@ class GameScene extends Phaser.Scene {
         }
 
         // collide with asteroid
-        this.physics.add.collider(this._player, this.asteroid, function (pShip, eShip, body1, body2) {
+        this.physics.add.collider(this.#player, this.asteroid, function (pShip, eShip, body1, body2) {
             console.log("Player hit asteroid ");
         });
 
@@ -155,7 +156,7 @@ class GameScene extends Phaser.Scene {
 
 
             // Collide with the player
-            this.physics.add.collider(this._player, this.enemy[i], function (pShip, eShip, body1, body2) {
+            this.physics.add.collider(this.#player, this.enemy[i], function (pShip, eShip, body1, body2) {
                 pShip.hp -= 10; eShip.hp -= 10;
                 if (pShip.hp > 0) { pShip.hitSound.play(); }
             });
@@ -177,7 +178,7 @@ class GameScene extends Phaser.Scene {
         for (let i = 0; i < this.enemy.length; i++) {
 
             for (let j = 0; j < this.enemy[i].bullet.length; j++) {
-                this.physics.add.overlap(this._player, this.enemy[i].bullet[j], function (hitShip, hitBullet, body1, body2) {
+                this.physics.add.overlap(this.#player, this.enemy[i].bullet[j], function (hitShip, hitBullet, body1, body2) {
                     console.log('Player hit');
                     hitShip.tintTick = 0;
                     hitShip.hp -= 20;
@@ -193,8 +194,8 @@ class GameScene extends Phaser.Scene {
         // Finally, add collision detection for Player bullets vs enemies
         for (let i = 0; i < this.enemy.length; i++) {
 
-            for (let j = 0; j < this._player.bullet.length; j++) {
-                this.physics.add.overlap(this.enemy[i], this._player.bullet[j], function (hitShip, hitBullet, body1, body2) {
+            for (let j = 0; j < this.#player.bullet.length; j++) {
+                this.physics.add.overlap(this.enemy[i], this.#player.bullet[j], function (hitShip, hitBullet, body1, body2) {
                     console.log('Enemy hit');
                     hitShip.tintTick = 0;
                     hitShip.hp -= 50;
@@ -330,8 +331,8 @@ class GameScene extends Phaser.Scene {
 
 
         if (this.gameState == state.Gameplay) {
-
-            this.cameras.main.setScroll(this.playerInput.getCameraPos().x, this.playerInput.getCameraPos().y);
+            // Center the camera on the player, let PlayerInput deal with smoothness
+            this.cameras.main.setScroll(this.playerInput.cameraPos.x, this.playerInput.cameraPos.y);
 
 
 
@@ -349,13 +350,13 @@ class GameScene extends Phaser.Scene {
                     this.infoText.setText("-------------DEBUG-------------\n"
                         + "(LEFT / RIGHT) Big thrust is " + Ship.BIG_THRUST + "\n"
                         + "(UP / DOWN) Max Speed is " + Ship.MAX_SPEED + "\n"
-                        + "VelX = " + this._player.body.velocity.x + "\nVelY = " + this._player.body.velocity.y +
-                        "\ntX: " + this._player.tX + "\ntY: " + this._player.tY +
-                        "\nCursorX: " + 1 + "\nCursorY: " + 1 +
-                        "\ntargetAngle: " + targetAngle + "\nPlayer Angle: " + this._player.rotation +
+                        + "VelX = " + this.#player.body.velocity.x + "\nVelY = " + this.#player.body.velocity.y +
+                        "\ntX: " + this.#player.tX + "\ntY: " + this.#player.tY +
+                        "\nCursorX: " + this.playerInput.cursorPos.x + "\nCursorY: " + this.playerInput.cursorPos.y +
+                        "\ntargetAngle: " + this.playerInput.targetAngle + "\nPlayer Angle: " + this.#player.rotation +
                         "\nMousebuttons: " + game.input.mousePointer.buttons + "\n" +
-                        "Player X: " + this._player.x + "\n" +
-                        "Player Y: " + this._player.y + "\n");
+                        "Player X: " + this.#player.x + "\n" +
+                        "Player Y: " + this.#player.y + "\n");
                     break;
 
                 case 3:
@@ -374,7 +375,7 @@ class GameScene extends Phaser.Scene {
             //update the asteroids
             this.asteroid.angle += 0.2;
 
-            this._player.update();
+            this.#player.update();
 
 
 

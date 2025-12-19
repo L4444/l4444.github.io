@@ -1,40 +1,52 @@
 class PlayerInput extends Phaser.GameObjects.GameObject
 {
+    #cameraPos =  { x: 0, y: 0};
+    #cursorPos = { x: 0, y: 0};
+    #player = null;
+    #targetAngle = 0;
+
+
     constructor(scene, player)
     {
         super(scene);
         scene.add.existing(this);
 
-        this._cameraPos = { x: 0, y: 0};
-        this._cursorPos = { x: 0, y: 0};
-        this._player = player;
+        
+        
+        this.#player = player;
+
 
     }
 
-    getCameraPos()
+    get cameraPos()
     {
-        return this._cameraPos;
+        return this.#cameraPos;
     }
 
-    getCursorPos()
+    get cursorPos()
     {
-        return this._cursorPos;
+        return this.#cursorPos;
+    }
+
+    get targetAngle()
+    {
+        return this.#targetAngle;
     }
 
     preUpdate(time, delta)
     {
         
         // Basic controls, BIG thrust is the engine that player directly controls
-            if (this.scene.keys.D.isDown) { this._player.right(); }
-            if (this.scene.keys.A.isDown) { this._player.left(); }
+            if (this.scene.keys.D.isDown) { this.#player.right(); }
+            if (this.scene.keys.A.isDown) { this.#player.left(); }
 
-            if (this.scene.keys.W.isDown) { this._player.forward(); }
-            if (this.scene.keys.S.isDown) { this._player.back(); }
+            if (this.scene.keys.W.isDown) { this.#player.forward(); }
+            if (this.scene.keys.S.isDown) { this.#player.back(); }
 
-            if (game.input.mousePointer.buttons == 1) { this._player.shoot(); }
+            if (game.input.mousePointer.buttons == 1) { this.#player.shoot(); }
 
-            this._cursorPos.x = game.input.mousePointer.x;
-            this._cursorPos.y = game.input.mousePointer.y;
+            this.cursorPos.x = game.input.mousePointer.x;
+            this.cursorPos.y = game.input.mousePointer.y;
 
 
 
@@ -45,20 +57,20 @@ class PlayerInput extends Phaser.GameObjects.GameObject
             let pointer = this.scene.input.activePointer;
             let worldCursor = pointer.positionToCamera(this.scene.cameras.main);
 
-            let targetAngle = Phaser.Math.Angle.Between(this._player.x, this._player.y, worldCursor.x, worldCursor.y);
+            this.#targetAngle = Phaser.Math.Angle.Between(this.#player.x, this.#player.y, worldCursor.x, worldCursor.y);
 
             // Turn to face the targetAngle
             let turnSpeed = 0.02;
-            this._player.rotation = Phaser.Math.Angle.RotateTo(this._player.rotation, targetAngle, turnSpeed);
+            this.#player.rotation = Phaser.Math.Angle.RotateTo(this.#player.rotation, this.#targetAngle, turnSpeed);
 
             // The camera target is where the camera should be, taking into account the cursor
             let cameraTarget = {};
-            cameraTarget.x = this._player.x - (this.scene.scale.width  ) + this._cursorPos.x;
-            cameraTarget.y = this._player.y - (this.scene.scale.height ) + this._cursorPos.y;
+            cameraTarget.x = this.#player.x - (this.scene.scale.width  ) + this.#cursorPos.x;
+            cameraTarget.y = this.#player.y - (this.scene.scale.height ) + this.#cursorPos.y;
 
             // move the actual camera focus to the target vector, very smoothly 
-            this._cameraPos.x -= (this._cameraPos.x - cameraTarget.x) / 20;
-            this._cameraPos.y -= (this._cameraPos.y - cameraTarget.y) / 20;
+            this.#cameraPos.x -= (this.#cameraPos.x - cameraTarget.x) / 20;
+            this.#cameraPos.y -= (this.#cameraPos.y - cameraTarget.y) / 20;
 
 
             
