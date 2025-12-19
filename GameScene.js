@@ -71,6 +71,8 @@ class GameScene extends Phaser.Scene {
     create() {
 
         
+
+
         // Disable mouse click context menu
         this.game.canvas.addEventListener("contextmenu", e => {
             e.preventDefault();
@@ -120,9 +122,10 @@ class GameScene extends Phaser.Scene {
 
 
 
-        this.player = new Ship(this, 'player', 1000, 1200, false);
+        this._player = new Ship(this, 'player', 1000, 1200, false);
+        this.playerInput = new PlayerInput(this,this._player);
 
-        Ship.playerShip = this.player;
+        Ship.playerShip = this._player;
 
 
 
@@ -139,7 +142,7 @@ class GameScene extends Phaser.Scene {
         }
 
         // collide with asteroid
-        this.physics.add.collider(this.player, this.asteroid, function (pShip, eShip, body1, body2) {
+        this.physics.add.collider(this._player, this.asteroid, function (pShip, eShip, body1, body2) {
             console.log("Player hit asteroid ");
         });
 
@@ -152,7 +155,7 @@ class GameScene extends Phaser.Scene {
 
 
             // Collide with the player
-            this.physics.add.collider(this.player, this.enemy[i], function (pShip, eShip, body1, body2) {
+            this.physics.add.collider(this._player, this.enemy[i], function (pShip, eShip, body1, body2) {
                 pShip.hp -= 10; eShip.hp -= 10;
                 if (pShip.hp > 0) { pShip.hitSound.play(); }
             });
@@ -174,7 +177,7 @@ class GameScene extends Phaser.Scene {
         for (let i = 0; i < this.enemy.length; i++) {
 
             for (let j = 0; j < this.enemy[i].bullet.length; j++) {
-                this.physics.add.overlap(this.player, this.enemy[i].bullet[j], function (hitShip, hitBullet, body1, body2) {
+                this.physics.add.overlap(this._player, this.enemy[i].bullet[j], function (hitShip, hitBullet, body1, body2) {
                     console.log('Player hit');
                     hitShip.tintTick = 0;
                     hitShip.hp -= 20;
@@ -190,8 +193,8 @@ class GameScene extends Phaser.Scene {
         // Finally, add collision detection for Player bullets vs enemies
         for (let i = 0; i < this.enemy.length; i++) {
 
-            for (let j = 0; j < this.player.bullet.length; j++) {
-                this.physics.add.overlap(this.enemy[i], this.player.bullet[j], function (hitShip, hitBullet, body1, body2) {
+            for (let j = 0; j < this._player.bullet.length; j++) {
+                this.physics.add.overlap(this.enemy[i], this._player.bullet[j], function (hitShip, hitBullet, body1, body2) {
                     console.log('Enemy hit');
                     hitShip.tintTick = 0;
                     hitShip.hp -= 50;
@@ -328,32 +331,7 @@ class GameScene extends Phaser.Scene {
 
         if (this.gameState == state.Gameplay) {
 
-            // Basic controls, BIG thrust is the engine that player directly controls
-            if (this.keys.D.isDown) { this.player.right(); }
-            if (this.keys.A.isDown) { this.player.left(); }
-
-            if (this.keys.W.isDown) { this.player.forward(); }
-            if (this.keys.S.isDown) { this.player.back(); }
-
-            if (game.input.mousePointer.buttons == 1) { this.player.shoot(); }
-
-            let cursorX = game.input.mousePointer.x;
-            let cursorY = game.input.mousePointer.y;
-
-
-
-
-            /// Make the player face the mouse pointer.
-            /// Chat gpt helped me with this, 
-            // Get the mouse position and convert it to worldCoordinates
-            let pointer = this.input.activePointer;
-            let worldCursor = pointer.positionToCamera(this.cameras.main);
-
-            let targetAngle = Phaser.Math.Angle.Between(this.player.x, this.player.y, worldCursor.x, worldCursor.y);
-
-            // Turn to face the targetAngle
-            let turnSpeed = 0.02;
-            this.player.rotation = Phaser.Math.Angle.RotateTo(this.player.rotation, targetAngle, turnSpeed);
+            this.cameras.main.setScroll(this.playerInput.getCameraPos().x, this.playerInput.getCameraPos().y);
 
 
 
@@ -371,13 +349,13 @@ class GameScene extends Phaser.Scene {
                     this.infoText.setText("-------------DEBUG-------------\n"
                         + "(LEFT / RIGHT) Big thrust is " + Ship.BIG_THRUST + "\n"
                         + "(UP / DOWN) Max Speed is " + Ship.MAX_SPEED + "\n"
-                        + "VelX = " + this.player.body.velocity.x + "\nVelY = " + this.player.body.velocity.y +
-                        "\ntX: " + this.player.tX + "\ntY: " + this.player.tY +
-                        "\nCursorX: " + cursorX + "\nCursorY: " + cursorY +
-                        "\ntargetAngle: " + targetAngle + "\nPlayer Angle: " + this.player.rotation +
+                        + "VelX = " + this._player.body.velocity.x + "\nVelY = " + this._player.body.velocity.y +
+                        "\ntX: " + this._player.tX + "\ntY: " + this._player.tY +
+                        "\nCursorX: " + 1 + "\nCursorY: " + 1 +
+                        "\ntargetAngle: " + targetAngle + "\nPlayer Angle: " + this._player.rotation +
                         "\nMousebuttons: " + game.input.mousePointer.buttons + "\n" +
-                        "Player X: " + this.player.x + "\n" +
-                        "Player Y: " + this.player.y + "\n");
+                        "Player X: " + this._player.x + "\n" +
+                        "Player Y: " + this._player.y + "\n");
                     break;
 
                 case 3:
@@ -396,7 +374,7 @@ class GameScene extends Phaser.Scene {
             //update the asteroids
             this.asteroid.angle += 0.2;
 
-            this.player.update();
+            this._player.update();
 
 
 
@@ -405,23 +383,6 @@ class GameScene extends Phaser.Scene {
                 this.enemy[i].update();
 
             }
-
-            
-            // The camera target is where the camera should be, taking into account the cursor
-            let cameraTarget = {};
-            cameraTarget.x = this.player.x - (this.scale.width  ) + cursorX;
-            cameraTarget.y = this.player.y - (this.scale.height ) + cursorY;
-
-            // move the actual camera focus to the target vector, very smoothly 
-            this.cameraX -= (this.cameraX - cameraTarget.x) / 20;
-            this.cameraY -= (this.cameraY - cameraTarget.y) / 20;
-
-
-            this.cameras.main.setScroll(this.cameraX, this.cameraY);
-
-
-
-
 
         }
 
