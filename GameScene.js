@@ -70,6 +70,10 @@ class GameScene extends Phaser.Scene {
 
     create() {
 
+        // Disable mouse click context menu
+        this.game.canvas.addEventListener("contextmenu", e => {
+            e.preventDefault();
+        });
 
 
 

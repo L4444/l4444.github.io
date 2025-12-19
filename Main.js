@@ -20,4 +20,6 @@ const state = {
     Gameplay: 'Gameplay'
 }
 
+
 var game = new Phaser.Game(config);
+
