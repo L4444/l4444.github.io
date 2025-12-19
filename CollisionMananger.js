@@ -3,12 +3,18 @@ class CollisionMananger extends Phaser.GameObjects.GameObject
     
 
 
-    constructor(scene, player, enemies)
+    constructor(scene, player, enemies,asteroids)
     {
         super(scene);
 
-        // Don't need to update 
-        //scene.add.existing(this);
+          // collide with asteroid
+          for( var i = 0; i < asteroids.length;i++)
+          {
+            scene.physics.add.collider(player, asteroids[i], function (pShip, eShip, body1, body2) {
+                console.log("Player hit asteroid ");
+            });
+        }
+
 
 
         // Setup Enemy collision detection
@@ -28,6 +34,14 @@ class CollisionMananger extends Phaser.GameObjects.GameObject
                     console.log('one bounce');
 
                 });
+            }
+
+            // Collide with asteroids
+            for( var j = 0; j < asteroids.length;j++)
+            {
+            scene.physics.add.collider(enemies[i], asteroids[j], function (pShip, eShip, body1, body2) {
+                console.log("Enemy hit asteroid ");
+            });
             }
         }
 

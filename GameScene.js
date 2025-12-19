@@ -79,9 +79,12 @@ class GameScene extends Phaser.Scene {
             e.preventDefault();
         });
 
+      
 
 
+        
         this.backgrounds = [];
+        this.asteroids = []
         // Create the "parallax" backgrounds, tile them together in 3x3 grid to make them look seamless.
         for (var i = 0; i < 9; i++) {
             var x = i % 3;
@@ -92,14 +95,27 @@ class GameScene extends Phaser.Scene {
             // Don't forget to add scroll factor back to make it parallax
             this.backgrounds[i].setScrollFactor(0.5);
 
+
+            // Create an asteroid to help player orient themselves
+            this.asteroids[i] = new Asteroid(this, 'asteroid', x * 800, y * 800, i * 20);
+            
+
+          
+
         }
 
+    
 
-        // Create an asteroid to help player orient themselves
-        this.asteroid = this.physics.add.sprite(1000, 1500, 'asteroid');
-        let r = 150;
-        this.asteroid.setCircle(r, 110, 100);
+        
+         // Create the player ship
+        this.#player = new Ship(this, 'player', 1000, 1200, false);
+        this.playerInput = new PlayerInput(this,this.#player);
 
+        Ship.playerShip = this.#player;
+
+        
+        
+        
 
 
         // Create music objects
@@ -123,10 +139,7 @@ class GameScene extends Phaser.Scene {
 
 
 
-        this.#player = new Ship(this, 'player', 1000, 1200, false);
-        this.playerInput = new PlayerInput(this,this.#player);
-
-        Ship.playerShip = this.#player;
+       
 
 
 
@@ -142,11 +155,7 @@ class GameScene extends Phaser.Scene {
 
         }
 
-        // collide with asteroid
-        this.physics.add.collider(this.#player, this.asteroid, function (pShip, eShip, body1, body2) {
-            console.log("Player hit asteroid ");
-        });
-
+      
 
         this.enemies = [];
         for (let i = 0; i < 4; i++) {
@@ -155,7 +164,7 @@ class GameScene extends Phaser.Scene {
 
         }
 
-        this.collisionManager = new CollisionMananger(this, this.#player, this.enemies);
+        this.collisionManager = new CollisionMananger(this, this.#player, this.enemies,this.asteroids);
 
 
 
@@ -326,9 +335,7 @@ class GameScene extends Phaser.Scene {
 
 
 
-            //update the asteroids
-            this.asteroid.angle += 0.2;
-
+           
          
 
 
