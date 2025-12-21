@@ -2,9 +2,7 @@ class DebugText extends Phaser.GameObjects.Text {
  
 
 
-    #scene = null;
-    #infoType = 1;
-    #testVars = [];
+    
 
     constructor(scene, x,y, testVars) {
 
@@ -12,19 +10,21 @@ class DebugText extends Phaser.GameObjects.Text {
         scene.add.existing(this);
         this.setScrollFactor(0);
 
-        this.#scene = scene;
+        this.scene = scene;
 
  
+        this.infoType = 1;
+        this.testVars = [];
 
     }
 
     switchInfoType()
     {
-        this.#infoType++;
+        this.infoType++;
 
-        if(this.#infoType >= this.#testVars.length)
+        if(this.infoType >= this.testVars.length)
         {
-            this.#infoType = 0;
+            this.infoType = 0;
         }
         
 
@@ -33,7 +33,7 @@ class DebugText extends Phaser.GameObjects.Text {
      preUpdate(time,delta) {
                     
 
-       this.#testVars[0] = {
+       this.testVars[0] = {
                         "-----------Controls-----------": "-",
                         "W,S,A,D for movement": "-",
                         "Left click for shoot" : "-",
@@ -46,31 +46,31 @@ class DebugText extends Phaser.GameObjects.Text {
                         "(Q / E) Turn Speed Factor" : Ship.TURN_SPEED_FACTOR,
                     };
         
-        this.#testVars[1] = {
+        this.testVars[1] = {
                         "-----------DEBUG-----------": "-",
-                        "Player X" : this.#scene.player.x,
-                        "Player Y" : this.#scene.player.y,
-                        "Player Thruster X" : this.#scene.player.tX,
-                        "Player Thruster Y" : this.#scene.player.tY,
-                        "Target Angle" : this.#scene.playerInput.targetAngle,
-                        "Player Angle" : this.#scene.player.rotation,
-                        "Player Velocity X" : this.#scene.player.body.velocity.x,
-                        "Player Velocity Y" : this.#scene.player.body.velocity.y,
-                        "Mouse Buttons" : this.#scene.game.input.mousePointer.buttons,
-                        "Cursor X (Screen)" : this.#scene.playerInput.cursorPos.x, 
-                        "Cursor Y (Screen)" : this.#scene.playerInput.cursorPos.y 
+                        "Player X" : this.scene.player.x,
+                        "Player Y" : this.scene.player.y,
+                        "Player Thruster X" : this.scene.player.tX,
+                        "Player Thruster Y" : this.scene.player.tY,
+                        "Target Angle" : this.scene.playerInput.targetAngle,
+                        "Player Angle" : this.scene.player.rotation,
+                        "Player Velocity X" : this.scene.player.body.velocity.x,
+                        "Player Velocity Y" : this.scene.player.body.velocity.y,
+                        "Mouse Buttons" : this.scene.game.input.mousePointer.buttons,
+                        "Cursor X (Screen)" : this.scene.playerInput.cursorPos.x, 
+                        "Cursor Y (Screen)" : this.scene.playerInput.cursorPos.y 
 
                     };
 
                             
-        this.#testVars[2] = {
+        this.testVars[2] = {
                         "": "-"
                      
                         };
 
                     let debugs = "";
 
-                    for(const [key, value] of  Object.entries(this.#testVars[this.#infoType]))
+                    for(const [key, value] of  Object.entries(this.testVars[this.infoType]))
                     {
                         // "-" here stands for no "value"
                         if(value != "-")
@@ -87,32 +87,6 @@ class DebugText extends Phaser.GameObjects.Text {
                     
 
                     this.setText( debugs);
-
-/*
-  
-
-           
-                case 2:
-                    this.infoText.setText("-------------DEBUG-------------\n"
-                        + "(LEFT / RIGHT) Big thrust is " + Ship.BIG_THRUST + "\n"
-                        + "(UP / DOWN) Max Speed is " + Ship.MAX_SPEED + "\n"
-                        + "VelX = " + this.#player.body.velocity.x + "\nVelY = " + this.#player.body.velocity.y +
-                        "\ntX: " + this.#player.tX + "\ntY: " + this.#player.tY +
-                        "\nCursorX: " + this.playerInput.cursorPos.x + "\nCursorY: " + this.playerInput.cursorPos.y +
-                        "\ntargetAngle: " + this.playerInput.targetAngle + "\nPlayer Angle: " + this.#player.rotation +
-                        "\nMousebuttons: " + game.input.mousePointer.buttons + "\n" +
-                        "Player X: " + this.#player.x + "\n" +
-                        "Player Y: " + this.#player.y + "\n");
-                    break;
-
-                case 3:
-                    this.infoText.setText("-----------PARTICLES-----------");
-                    break;
-
-
-            }
-*/
-
 
      }
 

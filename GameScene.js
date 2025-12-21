@@ -1,11 +1,7 @@
 class GameScene extends Phaser.Scene {
 
-    #player = null;
-
-    get player()
-    {
-        return this.#player;
-    }
+    
+   
 
     constructor() {
         super('GameScene');
@@ -119,10 +115,10 @@ class GameScene extends Phaser.Scene {
 
         
          // Create the player ship
-        this.#player = new Ship(this, 'player', 1000, 1000, false);
-        this.playerInput = new PlayerInput(this,this.#player);
+        this.player = new Ship(this, 'player', 1000, 1000, false);
+        this.playerInput = new PlayerInput(this,this.player);
 
-        Ship.playerShip = this.#player;
+        Ship.playerShip = this.player;
 
         
         
@@ -165,7 +161,7 @@ class GameScene extends Phaser.Scene {
 
         }
 
-        this.collisionManager = new CollisionMananger(this, this.#player, this.enemies,this.statics);
+        this.collisionManager = new CollisionMananger(this, this.player, this.enemies,this.statics);
 
 
 
