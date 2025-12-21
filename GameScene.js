@@ -25,7 +25,7 @@ class GameScene extends Phaser.Scene {
 
         this.load.image('flare', 'particles/flare.png');
 
-        this.load.image('pew', 'pew.png');
+        this.load.image('pew', 'bullets/pew-yellow.png');
         this.load.image('red', 'red.png')
 
         var u;

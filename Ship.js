@@ -24,9 +24,9 @@ class Ship extends Phaser.Physics.Arcade.Sprite {
         // so that the bullets spawn obscured by the ship sprite)
         this.bullet = [];
         for (let i = 0; i < 10; i++) {
-            this.bullet[i] = scene.physics.add.sprite(x, y, "pew").setCircle(256 / 2, 0, 256 / 2 - 256 / 2);
+            this.bullet[i] = scene.physics.add.sprite(x, y, "pew").setCircle(39 / 4, 39 /4,39 /4);
             if (isEnemy) { this.bullet[i].tint = 0xFF6666; }
-            this.bullet[i].setScale(0.25);
+            
             this.bullet[i].x = -9999;
             this.bullet[i].y = -9999;
 
@@ -136,7 +136,7 @@ class Ship extends Phaser.Physics.Arcade.Sprite {
             this.bullet[this.nextBullet].y = this.y;
 
             let speed = -800;
-            // if(this.enemy) {speed = -200;} // Gimp the enemies, to make them easier to dodge
+             if(this.isEnemy) {speed = -200;} // Gimp the enemies, to make them easier to dodge
 
             // Use vectors to set the path of the bullet, use the X axis to align with the player ship.
             let v = new Phaser.Math.Vector2(-speed, 0);
@@ -288,10 +288,11 @@ class Ship extends Phaser.Physics.Arcade.Sprite {
 
 
 
+        //this.shoot();
 
         this.angle = Phaser.Math.RadToDeg(
             Phaser.Math.Angle.Between(this.x, this.y, Ship.playerShip.x, Ship.playerShip.y)
-        ) + 90; // The +90 is to ensure it points forward rather than to the right.
+        ); // The +90 is to ensure it points forward rather than to the right.
 
 
 
