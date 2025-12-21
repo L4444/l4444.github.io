@@ -213,27 +213,27 @@ class GameScene extends Phaser.Scene {
 
         });
         this.input.keyboard.on('keyup-LEFT', function (event) {
-            Ship.BIG_THRUST -= 20;
+            this.scene.player.THRUST_SPEED -= 20;
         });
 
         this.input.keyboard.on('keyup-RIGHT', function (event) {
-            Ship.BIG_THRUST += 20;
+            this.scene.player.THRUST_SPEED += 20;
         });
         this.input.keyboard.on('keyup-UP', function (event) {
-            Ship.MAX_SPEED += 20;
+            this.scene.player.MAX_SPEED += 20;
         });
         this.input.keyboard.on('keyup-DOWN', function (event) {
-            Ship.MAX_SPEED -= 20;
+            this.scene.player.MAX_SPEED -= 20;
         });
 
         this.input.keyboard.on('keyup-Q', function (event) {
 
-            Ship.TURN_SPEED_FACTOR += 1;
+            this.scene.player.TURN_SPEED_FACTOR += 1;
             
         });
 
         this.input.keyboard.on('keyup-E', function (event) {
-            Ship.TURN_SPEED_FACTOR -= 1;
+            this.scene.player.TURN_SPEED_FACTOR -= 1;
         });
 
         this.input.keyboard.on('keyup-F', function (event) {

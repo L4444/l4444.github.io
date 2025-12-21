@@ -42,9 +42,9 @@ class DebugText extends Phaser.GameObjects.Text {
                         "2 for battle music" : "-",
                         "3 for stealth music": "-",
                         "4 for boss music": "-",
-                        "(LEFT / RIGHT) Big thrust": Ship.BIG_THRUST,
-                        "(UP / DOWN) Max Speed" : Ship.MAX_SPEED,
-                        "(Q / E) Turn Speed Factor" : Ship.TURN_SPEED_FACTOR,
+                        "(LEFT / RIGHT) THRUST SPEED": this.scene.player.THRUST_SPEED,
+                        "(UP / DOWN) MAX SPEED" : this.scene.player.MAX_SPEED,
+                        "(Q / E) TURN SPEED FACTOR" : this.scene.player.TURN_SPEED_FACTOR,
                     };
         
         this.testVars[1] = {

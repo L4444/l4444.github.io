@@ -20,11 +20,10 @@ class KeyboardAndMouseController
     update(myShip)
     {
         
-            let isBoost = false;
-            if (this.scene.keys.SPACE.isDown) { myShip.boost(); isBoost = true;}
+            
+            if (this.scene.keys.SPACE.isDown) { myShip.boost(); }
 
-             // You can't turn while boosting
-            if(!isBoost) {
+          
             // Basic controls
             if (this.scene.keys.D.isDown) { myShip.right(); }
             if (this.scene.keys.A.isDown) { myShip.left(); }
@@ -51,12 +50,9 @@ class KeyboardAndMouseController
             this.targetAngle = Phaser.Math.Angle.Between(myShip.x, myShip.y, worldCursor.x, worldCursor.y);
             
 
-            // Turn to face the targetAngle
-            // TODO: Use the current ship's turn rate
-           
+            // Tell the ship what angle they should face
+            myShip.rotateTo(this.targetAngle);
             
-                myShip.rotation = Phaser.Math.Angle.RotateTo(myShip.rotation, this.targetAngle, Ship.TURN_SPEED_FACTOR / 1000);
-            }
             
 
             // The camera target is where the camera should be, taking into account the cursor
