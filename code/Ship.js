@@ -260,9 +260,11 @@ class Ship extends Phaser.Physics.Arcade.Sprite {
                 this.tY = 0;
                 boostMultiplier = 4;
                 this.thruster.start();
+                this.thruster.visible = true;
             }
             else {
                 this.thruster.stop();
+                this.thruster.visible = false;
                 this.rotation = Phaser.Math.Angle.RotateTo(this.rotation, this.targetAngle, this.TURN_SPEED_FACTOR / 1000);
 
             }
