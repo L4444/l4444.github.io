@@ -11,7 +11,7 @@ class CollisionMananger extends Phaser.GameObjects.GameObject
           for( var i = 0; i < statics.length;i++)
           {
             scene.physics.add.collider(player, statics[i], function (pShip, eShip, body1, body2) {
-                console.log("Player hit asteroid ");
+                //console.log("Player hit asteroid ");
             });
         }
 
@@ -31,7 +31,7 @@ class CollisionMananger extends Phaser.GameObjects.GameObject
             for (let j = i; j < enemies.length; j++) {
                 scene.physics.add.collider(enemies[i], enemies[j], function (aShip, bShip, body1, body2) {
                     //aShip.hp -= 5; bShip.hp -= 5; 
-                    console.log('one bounce');
+                    //console.log('one bounce');
 
                 });
             }
@@ -40,7 +40,7 @@ class CollisionMananger extends Phaser.GameObjects.GameObject
             for( var j = 0; j < statics.length;j++)
             {
             scene.physics.add.collider(enemies[i], statics[j], function (pShip, eShip, body1, body2) {
-                console.log("Enemy hit asteroid ");
+                //console.log("Enemy hit asteroid ");
             });
             }
         }

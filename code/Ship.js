@@ -13,9 +13,9 @@ class Ship extends Phaser.Physics.Arcade.Sprite {
         super(scene, x, y, spriteName);
 
 
-        this.THRUST_SPEED = 200;
-        this.TURN_SPEED_FACTOR = 20;
-        this.MAX_SPEED = 200;
+        this.THRUST_SPEED = 700;
+        this.TURN_SPEED_FACTOR = 80;
+        this.MAX_SPEED = 500;
 
         this.controller = controller;
 
@@ -74,12 +74,10 @@ class Ship extends Phaser.Physics.Arcade.Sprite {
 
         this.isEnemy = isEnemy;
         if (isEnemy) {
-
-            // Go right, then go left. Like space invaders :)
-            this.spaceInvaderRight = true;
-
-            // The Y position I "should" be in.
-            this.targetY = y;
+            this.TURN_SPEED_FACTOR = 20;
+            this.MAX_SPEED = 200;
+            this.THRUST_SPEED = 200;
+         
         }
         else {
             this.score = 0;
@@ -188,6 +186,13 @@ class Ship extends Phaser.Physics.Arcade.Sprite {
     boost() {
         this.isBoost = true;
     }
+
+    brake()
+    {
+
+        this.isBrake = true;
+
+    }
     preUpdate(time, delta) {
         this.tintTick += 5;
 
@@ -197,15 +202,13 @@ class Ship extends Phaser.Physics.Arcade.Sprite {
 
         this.tint = '0xFF' + this.tintTick.toString(16) + 'FF';
 
-
-
-
+        this.tX = 0;
+        this.tY = 0;
+        this.isBoost = false;
+        this.isBrake = false;
         this.controller.update(this);
 
 
-
-
-        //if (this.isEnemy) { this.doAI(); }
 
         // Check hp 
         if (this.hp <= 0) {
@@ -235,16 +238,28 @@ class Ship extends Phaser.Physics.Arcade.Sprite {
         this.hpBarBack.y = this.hpBarFront.y = this.y - 50;
         this.hpBarFront.displayWidth = (this.hp / 100) * this.displayWidth;
 
-        // If we are boosting we can't turn
+       
+
+        // If we aren't dead, regen HP slowly
+        if (this.hp < 100) { this.hp += 0.1; }
+
+
+        if(this.isBrake)
+        {
+            this.body.setDrag(500,500);
+        }
+        else
+        {
+            this.body.setDrag(0,0);
+        }
+
+
+         // If we are boosting we can't turn
         if (!this.isBoost) {
 
             this.rotation = Phaser.Math.Angle.RotateTo(this.rotation, this.targetAngle, this.TURN_SPEED_FACTOR / 1000);
         }
 
-        // If we aren't dead, regen HP slowly
-        if (this.hp < 100) { this.hp += 0.1; }
-
-        
         let boostMultiplier = 1;
         if (this.isBoost) {
             this.tX = 1;
@@ -262,7 +277,7 @@ class Ship extends Phaser.Physics.Arcade.Sprite {
         // Convert the key presses into an actual angle we can use to move the ship.
         let v = new Phaser.Math.Vector2(this.tX, this.tY);
         v.normalize();
-        v.rotate(Phaser.Math.DegToRad(this.angle));
+        v.rotate(Phaser.Math.DegToRad(this.angle)); 
         v.scale(this.THRUST_SPEED * boostMultiplier);
         this.body.setMaxSpeed(this.MAX_SPEED * boostMultiplier);
         this.setAcceleration(v.x, v.y); // Then Activate the thrusters!
@@ -283,9 +298,7 @@ class Ship extends Phaser.Physics.Arcade.Sprite {
         this.particleContainer.y = this.y + thr.y + this.body.velocity.y / 60;
         this.particleContainer.angle = this.angle - 90;
 
-        this.tX = 0;
-        this.tY = 0;
-        this.isBoost = false;
+     
 
 
 
@@ -295,22 +308,6 @@ class Ship extends Phaser.Physics.Arcade.Sprite {
     rotateTo(targetAngle) {
         this.targetAngle = targetAngle;
     }
-    doAI() {
-
-
-        if (this.x > 750) { this.spaceInvaderRight = false; }
-        if (this.x < 150) { this.spaceInvaderRight = true; }
-
-
-
-        //this.shoot();
-
-        this.angle = Phaser.Math.RadToDeg(
-            Phaser.Math.Angle.Between(this.x, this.y, Ship.playerShip.x, Ship.playerShip.y)
-        ); // The +90 is to ensure it points forward rather than to the right.
-
-
-
-    }
+  
 
 }

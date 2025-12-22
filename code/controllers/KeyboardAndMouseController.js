@@ -13,6 +13,20 @@ class KeyboardAndMouseController
         this.cursorPos = { x: 0, y: 0};
     
         this.targetAngle = 0;
+
+        // Yes, phaser does not allow me to simply addKeys('shift'), I have to add each one in a dictionary
+        // If I don't "capture", the F1 key it triggers on the browser
+        this.keys = scene.input.keyboard.addKeys({
+            'W': Phaser.Input.Keyboard.KeyCodes.W,
+            'S': Phaser.Input.Keyboard.KeyCodes.S,
+            'A': Phaser.Input.Keyboard.KeyCodes.A,
+            'D': Phaser.Input.Keyboard.KeyCodes.D,
+            'SPACE': Phaser.Input.Keyboard.KeyCodes.SPACE,
+            'SHIFT': Phaser.Input.Keyboard.KeyCodes.SHIFT,
+            'F1': Phaser.Input.Keyboard.KeyCodes.F1
+        });
+    
+
     }
 
   
@@ -21,15 +35,16 @@ class KeyboardAndMouseController
     {
         
             
-            if (this.scene.keys.SPACE.isDown) { myShip.boost(); }
+            if (this.keys.SPACE.isDown) { myShip.brake(); }
+            if (this.keys.SHIFT.isDown) { myShip.boost(); }
 
           
             // Basic controls
-            if (this.scene.keys.D.isDown) { myShip.right(); }
-            if (this.scene.keys.A.isDown) { myShip.left(); }
+            if (this.keys.D.isDown) { myShip.right(); }
+            if (this.keys.A.isDown) { myShip.left(); }
 
-            if (this.scene.keys.W.isDown) { myShip.forward(); }
-            if (this.scene.keys.S.isDown) { myShip.back(); }
+            if (this.keys.W.isDown) { myShip.forward(); }
+            if (this.keys.S.isDown) { myShip.back(); }
 
             
                

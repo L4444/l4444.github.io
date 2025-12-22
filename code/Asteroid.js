@@ -10,8 +10,9 @@ class Asteroid extends Phaser.Physics.Arcade.Sprite {
         scene.add.existing(this);
         scene.physics.add.existing(this); 
 
-        let r = 150;
-        this.setCircle(r, 110, 100);
+        let r = 75;
+        // radius, offsetX, offsetY
+        this.setCircle(r, 55, 55);
 
         this.tint = this.tint = '0xFF' + tint.toString(16) + tint.toString(16);
     }

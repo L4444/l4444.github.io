@@ -37,7 +37,8 @@ class DebugText extends Phaser.GameObjects.Text {
                         "-----------Controls-----------": "-",
                         "W,S,A,D for movement": "-",
                         "Left click for shoot" : "-",
-                        "Spacebar for Boost" : "-",
+                        "Shift for Boost" : "-",
+                        "Spacebar for Brake" : "-",
                         "1 for menu music" : "-",
                         "2 for battle music" : "-",
                         "3 for stealth music": "-",
@@ -45,6 +46,7 @@ class DebugText extends Phaser.GameObjects.Text {
                         "(LEFT / RIGHT) THRUST SPEED": this.scene.player.THRUST_SPEED,
                         "(UP / DOWN) MAX SPEED" : this.scene.player.MAX_SPEED,
                         "(Q / E) TURN SPEED FACTOR" : this.scene.player.TURN_SPEED_FACTOR,
+                        "G to show/hide physics bodies" : "-"
                     };
         
         this.testVars[1] = {
@@ -59,7 +61,9 @@ class DebugText extends Phaser.GameObjects.Text {
                         "Player Velocity Y" : this.scene.player.body.velocity.y,
                         "Mouse Buttons" : this.scene.game.input.mousePointer.buttons,
                         "Cursor X (Screen)" : this.scene.player.controller.cursorPos.x, 
-                        "Cursor Y (Screen)" : this.scene.player.controller.cursorPos.y 
+                        "Cursor Y (Screen)" : this.scene.player.controller.cursorPos.y,
+                        "Player Boost" : this.scene.player.isBoost,
+                        "Player Brake" : this.scene.player.isBrake
 
                     };
 

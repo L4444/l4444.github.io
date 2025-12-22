@@ -173,7 +173,7 @@ class GameScene extends Phaser.Scene {
         this.gameLogo = this.add.sprite(450, 350, 'logo');
 
 
-        this.keys = this.input.keyboard.addKeys('W,S,A,D,F,E,Q,F,G,H,UP,DOWN,SPACE,F1');
+        
 
 
 
@@ -236,6 +236,19 @@ class GameScene extends Phaser.Scene {
             this.scene.player.TURN_SPEED_FACTOR -= 1;
         });
 
+        this.input.keyboard.on('keyup-F', function (event) {
+
+
+
+        });
+        this.input.keyboard.on('keyup-G', function (event) {
+             this.scene.physics.world.drawDebug = !this.scene.physics.world.drawDebug;
+            this.scene.physics.world.debugGraphic.clear();
+
+
+
+        });
+
        
 
 
@@ -255,6 +268,9 @@ class GameScene extends Phaser.Scene {
 
         this.infoMode = 1;
 
+        // Turn off physics wireframes, due to the way phaser works...
+        //  I have to enable it on config and disable it here if I want to "toggle" it at runtime
+        this.physics.world.drawDebug = false;
 
         console.log('Objects created');
 
