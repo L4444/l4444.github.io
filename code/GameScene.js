@@ -236,17 +236,7 @@ class GameScene extends Phaser.Scene {
             this.scene.player.TURN_SPEED_FACTOR -= 1;
         });
 
-        this.input.keyboard.on('keyup-F', function (event) {
-
-
-
-        });
-        this.input.keyboard.on('keyup-G', function (event) {
-
-
-
-        });
-
+       
 
 
         // Start game
