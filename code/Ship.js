@@ -56,7 +56,7 @@ class Ship extends Phaser.Physics.Arcade.Sprite {
             lifespan: 200,
 
             angle: -90,
-            scale: { start: 0.20, end: 0.10, ease: 'sine.out' },
+            scale: { start: 0.40, end: 0.20, ease: 'sine.out' },
             alpha: { start: 1, end: 0 },
 
             speed: 300,
