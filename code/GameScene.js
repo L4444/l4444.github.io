@@ -155,7 +155,7 @@ class GameScene extends Phaser.Scene {
       
 
         this.enemies = [];
-        for (let i = 0; i < 4; i++) {
+        for (let i = 0; i < 5; i++) {
 
             this.enemies[i] = new Ship(this, 'enemy' + (i + 1), 1000 + (i * 200), 800, new AIController(this), true);
 
