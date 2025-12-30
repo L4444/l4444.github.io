@@ -166,10 +166,10 @@ class GameScene extends Phaser.Scene {
 
       
 
-        
-        for (let i = 0; i < 5; i++) {
+        // Make the enemy ships
+        for (let i = 0; i < 8; i++) {
 
-            this.ships.push(new Ship(this, 'enemy' + (i + 1), 1000 + (i * 200), 800, new AIController(this), true));
+            this.ships.push(new Ship(this, 'enemy1', 1000 + (i * 200), 800, new AIController(this), true));
 
         }
 
@@ -271,7 +271,7 @@ class GameScene extends Phaser.Scene {
        this.bulletManager = new BulletManager(this);
 
             this.physics.add.collider(this.ships, this.statics, function (pShip, eShip, body1, body2) {
-                console.log("Ship hit asteroid ");
+                console.log(pShip.name + " hit asteroid ");
             });
 
             this.physics.add.collider(this.ships, this.ships, function (pShip, eShip, body1, body2) {

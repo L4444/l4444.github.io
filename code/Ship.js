@@ -26,20 +26,7 @@ class Ship extends Phaser.Physics.Arcade.Sprite {
 
 
 
-        // The bullet sprites (Note that I intialise this before the ship 
-        // so that the bullets spawn obscured by the ship sprite)
-        this.bullet = [];
-        for (let i = 0; i < 10; i++) {
-            this.bullet[i] = scene.physics.add.sprite(x, y, "pew").setCircle(39 / 4, 39 / 4, 39 / 4);
-            if (isEnemy) { this.bullet[i].tint = 0xFF6666; }
-
-            this.bullet[i].x = -9999;
-            this.bullet[i].y = -9999;
-
-
-
-        }
-        this.nextBullet = 0;
+        
 
         this.clock = 0;
         this.lastTick = -500;
@@ -105,8 +92,7 @@ class Ship extends Phaser.Physics.Arcade.Sprite {
 
         this.shootSound.volume = 0.3;
 
-        // Manually add ship to scene and physics (contructor doesn't do this for us)
-        // Put it all the way down here so the ship renders over the bullets
+        // Manually add ship to scene and physics (contructor doesn't do this for us
         scene.add.existing(this);
         scene.physics.add.existing(this);
 
