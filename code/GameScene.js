@@ -8,6 +8,16 @@ class GameScene extends Phaser.Scene {
 
     }
 
+    getPlayer()
+    {
+        return this.ships[0];
+    }
+
+    getBulletManager()
+    {
+        return this.bulletManager;
+    }
+
 
 
     preload() {
@@ -114,12 +124,13 @@ class GameScene extends Phaser.Scene {
         
         
 
-        
+        this.ships = [];
+
          // Create the player ship
-        this.player = new Ship(this, 'player', 1000, 1000,new KeyboardAndMouseController(this), false);
+        this.ships.push(new Ship(this, 'player', 1000, 1000,new KeyboardAndMouseController(this), false));
         
 
-        Ship.playerShip = this.player;
+        
 
         
         
@@ -155,14 +166,14 @@ class GameScene extends Phaser.Scene {
 
       
 
-        this.enemies = [];
+        
         for (let i = 0; i < 5; i++) {
 
-            this.enemies[i] = new Ship(this, 'enemy' + (i + 1), 1000 + (i * 200), 800, new AIController(this), true);
+            this.ships.push(new Ship(this, 'enemy' + (i + 1), 1000 + (i * 200), 800, new AIController(this), true));
 
         }
 
-        this.collisionManager = new CollisionMananger(this, this.player, this.enemies,this.statics);
+        
 
 
 
@@ -214,33 +225,35 @@ class GameScene extends Phaser.Scene {
 
         });
         this.input.keyboard.on('keyup-LEFT', function (event) {
-            this.scene.player.THRUST_SPEED -= 20;
+            this.scene.getPlayer().THRUST_SPEED -= 20;
         });
 
         this.input.keyboard.on('keyup-RIGHT', function (event) {
-            this.scene.player.THRUST_SPEED += 20;
+            this.scene.getPlayer().THRUST_SPEED += 20;
         });
         this.input.keyboard.on('keyup-UP', function (event) {
-            this.scene.player.MAX_SPEED += 20;
+            this.scene.getPlayer().MAX_SPEED += 20;
         });
         this.input.keyboard.on('keyup-DOWN', function (event) {
-            this.scene.player.MAX_SPEED -= 20;
+            this.scene.getPlayer().MAX_SPEED -= 20;
         });
 
         this.input.keyboard.on('keyup-Q', function (event) {
 
-            this.scene.player.TURN_SPEED_FACTOR += 1;
+            this.scene.getPlayer().TURN_SPEED_FACTOR += 1;
             
         });
 
         this.input.keyboard.on('keyup-E', function (event) {
-            this.scene.player.TURN_SPEED_FACTOR -= 1;
+            this.scene.getPlayer().TURN_SPEED_FACTOR -= 1;
         });
 
         this.input.keyboard.on('keyup-F', function (event) {
             
-              for (let i = 0; i < this.scene.enemies.length; i++) {
-                this.scene.enemies[i].isActive = !this.scene.enemies[i].isActive;
+            
+              for (let i = 0; i < this.scene.ships.length; i++) {
+                this.scene.ships[i].isActive = !this.scene.ships[i].isActive;
+                console.log('keyu2p');
 
               }
 
@@ -255,8 +268,30 @@ class GameScene extends Phaser.Scene {
 
         });
 
-       
+       this.bulletManager = new BulletManager(this);
 
+            this.physics.add.collider(this.ships, this.statics, function (pShip, eShip, body1, body2) {
+                console.log("Ship hit asteroid ");
+            });
+
+            this.physics.add.collider(this.ships, this.ships, function (pShip, eShip, body1, body2) {
+                 //pShip.hp -= 10; eShip.hp -= 10;
+                if (pShip.hp > 0) { pShip.hitSound.play(); }
+            });
+        
+             this.physics.add.overlap(this.ships, this.bulletManager.getBullets(), function (hitShip, hitBullet, body1, body2) {
+                
+                    if(hitShip != hitBullet.owner)
+                    {
+                    console.log(hitShip.name + ' hit');
+                    hitShip.tintTick = 0;
+                    hitShip.hp -= 20;
+                    //if(hitShip.hp > 0) {hitShip.hitSound.play();} /// This is a horrible sound
+                    hitBullet.x = -9999; hitBullet.y = -9999;
+                    hitShip.setVelocity(hitBullet.body.velocity.x, hitBullet.body.velocity.y);
+                    hitBullet.setVelocity(0, 0);
+                    }
+                });
 
         // Start game
         this.gameState = state.Menu;
@@ -265,8 +300,8 @@ class GameScene extends Phaser.Scene {
         this.resumeGame();
 
 
-
-        Ship.playerShip.score = 0;
+     
+        this.getPlayer().score = 0;
 
      
         this.cameraX = 0;
@@ -291,12 +326,12 @@ class GameScene extends Phaser.Scene {
         this.menuBack.tilePositionY -= 1;
 
 
-        this.scoreText.text = "Score: " + Ship.playerShip.score;
+        this.scoreText.text = "Score: " + this.getPlayer().score;
 
 
         if (this.gameState == state.Gameplay) {
             // Center the camera on the player, let PlayerInput deal with smoothness
-            this.cameras.main.setScroll(this.player.controller.cameraPos.x, this.player.controller.cameraPos.y);
+            this.cameras.main.setScroll(this.getPlayer().controller.cameraPos.x, this.getPlayer().controller.cameraPos.y);
  
 
         }

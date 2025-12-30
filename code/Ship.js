@@ -1,7 +1,7 @@
 class Ship extends Phaser.Physics.Arcade.Sprite {
 
 
-    static playerShip;
+    
 
     static explosionSound;
 
@@ -11,7 +11,7 @@ class Ship extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, spriteName, x, y, controller, isEnemy) {
 
         super(scene, x, y, spriteName);
-
+        this.name = spriteName;
 
         this.THRUST_SPEED = 700;
         this.TURN_SPEED_FACTOR = 80;
@@ -139,21 +139,7 @@ class Ship extends Phaser.Physics.Arcade.Sprite {
             this.shootSound.play();
 
 
-            this.bullet[this.nextBullet].x = this.x;
-            this.bullet[this.nextBullet].y = this.y;
-
-            let speed = -800;
-            if (this.isEnemy) { speed = -200; } // Gimp the enemies, to make them easier to dodge
-
-            // Use vectors to set the path of the bullet, use the X axis to align with the player ship.
-            let v = new Phaser.Math.Vector2(-speed, 0);
-            v.rotate(this.rotation);
-
-            this.bullet[this.nextBullet].setVelocity(v.x, v.y);
-            this.bullet[this.nextBullet].rotation = this.rotation;
-
-            if (this.nextBullet < this.bullet.length - 1) { this.nextBullet++; } else { this.nextBullet = 0; }
-
+           this.scene.getBulletManager().shoot(this);
             this.lastTick = this.clock;
 
         }
@@ -221,7 +207,7 @@ class Ship extends Phaser.Physics.Arcade.Sprite {
             if (this.isEnemy) {
                 this.x = 0;
                 this.y = 0;
-                Ship.playerShip.score += 100;
+                this.scene.getPlayer().score += 100;
 
 
             }
