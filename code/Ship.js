@@ -99,7 +99,7 @@ class Ship extends Phaser.Physics.Arcade.Sprite {
 
         // TODO: Adjust this to account for different image sizes
         // -- Get the measurements of the ship spread and create a hit circle 
-        
+        // Let's test this again
         let w = this.displayWidth;
         let h = this.displayHeight;
         this.body.setCircle(w / 2, 0, 0);
