@@ -103,7 +103,7 @@ class Ship extends Phaser.Physics.Arcade.Sprite {
         let w = this.displayWidth;
         let h = this.displayHeight;
         this.body.setCircle(w / 2, 0, 0);
-        this.body.setBounce(1, 1); // Ships should bounce enough off each other to prevent "rubbing"
+        this.body.setBounce(2, 2); // Ships should bounce enough off each other to prevent "rubbing"
 
         // set hp
         this.hp = 100;

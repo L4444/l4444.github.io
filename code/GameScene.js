@@ -38,6 +38,10 @@ class GameScene extends Phaser.Scene {
         this.load.image('bigPew', 'bullets/pew-big-green.png');
         this.load.image('red', 'red.png')
 
+        this.load.image('earth', 'Terran1.png')
+
+
+
         var u;
         for (var i = 0; i < 15; i++) {
             u = (i + 1).toString().padStart(4, '0');
@@ -95,6 +99,11 @@ class GameScene extends Phaser.Scene {
 
 
         this.gameBackground = new GameBackground(this, 'back', 1000, 1000, 1024 * 3, 1024 * 3);
+
+        this.earth = this.add.sprite(1000,1000,'earth');
+        this.earth.tint = 0x333333;
+        
+        this.earth.setScrollFactor(0.5);
 
 
         this.statics = []
@@ -289,7 +298,7 @@ class GameScene extends Phaser.Scene {
                 hitShip.tintTick = 0;
                 hitShip.hp -= 2;
                 //if(hitShip.hp > 0) {hitShip.hitSound.play();} /// This is a horrible sound
-                hitShip.setVelocity(hitBullet.body.velocity.x, hitBullet.body.velocity.y);
+                //hitShip.setVelocity(hitBullet.body.velocity.x, hitBullet.body.velocity.y);
                 hitBullet.disable();
 
 
