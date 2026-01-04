@@ -2,21 +2,13 @@ class Ship extends Phaser.Physics.Arcade.Sprite {
 
     static explosionSound;
 
-    constructor(scene, spriteName, x, y, controller, isEnemy) {
+    constructor(scene, spec, x, y, controller, isEnemy) {
 
-        super(scene, x, y, spriteName);
+        super(scene, x, y, spec.spriteName);
         this.setDepth(SpriteLayer.SHIP);
-        this.name = spriteName;
+        this.name = spec.spriteName;
 
-        this.THRUST_SPEED = 700;
-        this.TURN_SPEED_FACTOR = 80;
-        this.MAX_SPEED = 500;
-        
-/*
-        this.THRUST_SPEED = 200;
-        this.TURN_SPEED_FACTOR = 10;
-        this.MAX_SPEED = 500;
-        */
+        this.spec = spec;
 
         this.controller = controller;
 
@@ -47,9 +39,7 @@ class Ship extends Phaser.Physics.Arcade.Sprite {
 
         this.isEnemy = isEnemy;
         if (isEnemy) {
-            this.TURN_SPEED_FACTOR = 20;
-            this.MAX_SPEED = 200;
-            this.THRUST_SPEED = 200;
+         
 
             // Disable enemy AI when testing
             this.isActive = false;
@@ -106,7 +96,7 @@ class Ship extends Phaser.Physics.Arcade.Sprite {
 
         this.mg = scene.sound.add('mg', { loop: false });
         this.mg.volume =  0.1;
-        this.weaponSystems[1] = {
+        this.weaponSystems[0] = {
             spriteName: 'pew',
             speed: 1200,
             range: 100,
@@ -117,30 +107,24 @@ class Ship extends Phaser.Physics.Arcade.Sprite {
 
         this.pew = scene.sound.add('shoot2', { loop: false });
         this.pew.volume = 0.5;
-        this.weaponSystems[2] = {
+        this.weaponSystems[1] = {
             spriteName: 'bigPew',
-            speed: 600,
+            speed: 800,
             range: 150,
             refireDelay: 40,
             shootSound: this.pew,
             damageValue: 30
         }
 
-        for(var i = 1; i < this.weaponSystems.length; i++)
+        for(var i = 0; i < this.weaponSystems.length; i++)
         {
             this.weaponSystems[i].clock = 0;
             this.weaponSystems[i].lastTick = 0;
         }
     }
     shoot(weaponNumber) {
-
-        if(weaponNumber == 0)
-        {
-            throw new Error("weaponNumber cannot be 0. The first weapon is 1!");
-        }
-
+  
         let ws = this.weaponSystems[weaponNumber];
-
         if (ws.clock > ws.lastTick + ws.refireDelay) {
             ws.shootSound.play();
             this.scene.getBulletManager().shoot(this, ws);
@@ -220,7 +204,7 @@ class Ship extends Phaser.Physics.Arcade.Sprite {
         if (this.isBrake) {
             this.body.setDrag(1000, 1000);
             this.setAcceleration(0, 0); // Then Activate the thrusters!
-            this.rotation = Phaser.Math.Angle.RotateTo(this.rotation, this.targetAngle, this.TURN_SPEED_FACTOR / 1000);
+            this.rotation = Phaser.Math.Angle.RotateTo(this.rotation, this.targetAngle, this.spec.TURN_SPEED_FACTOR / 1000);
         }
         else {
             this.body.setDrag(0, 0);
@@ -236,7 +220,7 @@ class Ship extends Phaser.Physics.Arcade.Sprite {
             else {
                 this.thruster.stop();
                 this.thruster.visible = false;
-                this.rotation = Phaser.Math.Angle.RotateTo(this.rotation, this.targetAngle, this.TURN_SPEED_FACTOR / 1000);
+                this.rotation = Phaser.Math.Angle.RotateTo(this.rotation, this.targetAngle, this.spec.TURN_SPEED_FACTOR / 1000);
 
             }
 
@@ -245,8 +229,8 @@ class Ship extends Phaser.Physics.Arcade.Sprite {
             let v = new Phaser.Math.Vector2(this.tX, this.tY);
             v.normalize();
             v.rotate(Phaser.Math.DegToRad(this.angle));
-            v.scale(this.THRUST_SPEED * boostMultiplier);
-            this.body.setMaxSpeed(this.MAX_SPEED * boostMultiplier);
+            v.scale(this.spec.THRUST_SPEED * boostMultiplier);
+            this.body.setMaxSpeed(this.spec.MAX_SPEED * boostMultiplier);
             this.setAcceleration(v.x, v.y); // Then Activate the thrusters!
 
 
@@ -257,7 +241,7 @@ class Ship extends Phaser.Physics.Arcade.Sprite {
 
 
         // Tick the clock (useful for limiting bullet firing)
-        for(var i = 1; i < this.weaponSystems.length; i++)
+        for(var i = 0; i < this.weaponSystems.length; i++)
         {
         this.weaponSystems[i].clock++;
         }
@@ -284,6 +268,11 @@ class Ship extends Phaser.Physics.Arcade.Sprite {
     }
     rotateTo(targetAngle) {
         this.targetAngle = targetAngle;
+    }
+
+    getSpec()
+    {
+        return this.spec;
     }
 
 

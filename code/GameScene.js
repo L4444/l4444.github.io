@@ -58,7 +58,7 @@ class GameScene extends Phaser.Scene {
         // load shooting sounds
         this.load.audio('shoot1', 'sounds/alienshoot1.wav');
         this.load.audio('shoot2', 'sounds/alienshoot2.wav');
-        this.load.audio('mg','sounds/Futuristic SMG Single Shot.wav');
+        this.load.audio('mg', 'sounds/Futuristic SMG Single Shot.wav');
 
 
         // load all the explosion sounds
@@ -102,9 +102,9 @@ class GameScene extends Phaser.Scene {
 
         this.gameBackground = new GameBackground(this, 'back', 1000, 1000, 1024 * 3, 1024 * 3);
 
-        this.earth = this.add.sprite(1000,1000,'earth');
+        this.earth = this.add.sprite(1000, 1000, 'earth');
         this.earth.tint = 0x333333;
-        
+
         this.earth.setScrollFactor(0.5);
 
 
@@ -129,6 +129,23 @@ class GameScene extends Phaser.Scene {
         this.statics.push(new Wall(this, 'red', 1000, 1000 + boundSize, boundSize * 2, wallThickness)); // Bottom
         this.statics.push(new Wall(this, 'red', 1000 - boundSize, 1000, wallThickness, boundSize * 2)); // Left
 
+        // Ship specifications
+        var humanFighter =
+        {
+            spriteName: 'player',
+            THRUST_SPEED: 700,
+            TURN_SPEED_FACTOR: 80,
+            MAX_SPEED: 500
+        }
+
+        var alienDestroyer =
+        {
+            spriteName: 'enemy1',
+            THRUST_SPEED: 400,
+            TURN_SPEED_FACTOR: 10,
+            MAX_SPEED: 300
+        }
+
 
 
 
@@ -137,14 +154,7 @@ class GameScene extends Phaser.Scene {
         this.ships = [];
 
         // Create the player ship
-        this.ships.push(new Ship(this, 'player', 1000, 1000, new KeyboardAndMouseController(this), false));
-
-
-
-
-
-
-
+        this.ships.push(new Ship(this, humanFighter, 1000, 1000, new KeyboardAndMouseController(this), false));
 
 
         // Create music objects
@@ -179,7 +189,7 @@ class GameScene extends Phaser.Scene {
         // Make the enemy ships
         for (let i = 0; i < 2; i++) {
 
-            this.ships.push(new Ship(this, 'enemy1', 1000 + (i * 200), 600, new AIController(this), true));
+            this.ships.push(new Ship(this, alienDestroyer, 1000 + (i * 200), 600, new AIController(this), true));
 
         }
 
@@ -200,19 +210,19 @@ class GameScene extends Phaser.Scene {
 
 
         this.debugText = new DebugText(this, 10, 30);
-        this.helpText = this.add.text(10, 10, "Press F1 to cycle through help menus"); 
+        this.helpText = this.add.text(10, 10, "Press F1 to cycle through help menus");
         this.helpText.setScrollFactor(0);
         this.helpText.visible = false; // Don't show the help text in the "Main Menu"
         this.helpText.setDepth(SpriteLayer.UI);
 
 
-        this.pauseText = this.add.text(400, 400, "Paused - Press escape to unpause"); 
+        this.pauseText = this.add.text(400, 400, "Paused - Press escape to unpause");
         this.pauseText.setScrollFactor(0);
         this.pauseText.setDepth(SpriteLayer.UI);
 
         this.scoreText = this.add.text(600, 10, "");
-         this.scoreText.setScrollFactor(0);
-         this.scoreText.setDepth(SpriteLayer.UI);
+        this.scoreText.setScrollFactor(0);
+        this.scoreText.setDepth(SpriteLayer.UI);
 
 
 
@@ -269,7 +279,7 @@ class GameScene extends Phaser.Scene {
 
             for (let i = 0; i < this.scene.ships.length; i++) {
                 this.scene.ships[i].isActive = !this.scene.ships[i].isActive;
-                console.log('keyu2p');
+                
 
             }
 
@@ -295,7 +305,7 @@ class GameScene extends Phaser.Scene {
         // 2) Check for ship to ship collisions
         this.physics.add.collider(this.ships, this.ships, function (pShip, eShip, body1, body2) {
             //pShip.hp -= 10; eShip.hp -= 10;
-            if (pShip.hp > 0) { pShip.hitSound.play(); }
+           // if (pShip.hp > 0) { pShip.hitSound.play(); }
         });
 
         // 3) Check for ship to bullet collisions
@@ -316,11 +326,11 @@ class GameScene extends Phaser.Scene {
         // 4) Finally, check for bullet to static collisions.
         this.physics.add.overlap(this.statics, this.bulletManager.getBullets(), function (hitStatic, hitBullet, body1, body2) {
 
-           
-                hitBullet.disable();
+
+            hitBullet.disable();
 
 
-            
+
         });
 
 
@@ -339,7 +349,7 @@ class GameScene extends Phaser.Scene {
         this.cameraX = 0;
         this.cameraY = 0;
 
-        
+
 
         // Turn off physics wireframes, due to the way phaser works...
         //  I have to enable it on config and disable it here if I want to "toggle" it at runtime
