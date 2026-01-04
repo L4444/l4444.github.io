@@ -5,7 +5,7 @@ class Ship extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, spriteName, x, y, controller, isEnemy) {
 
         super(scene, x, y, spriteName);
-        this.setDepth(2);
+        this.setDepth(SpriteLayer.SHIP);
         this.name = spriteName;
 
         this.THRUST_SPEED = 700;
@@ -93,8 +93,8 @@ class Ship extends Phaser.Physics.Arcade.Sprite {
 
         // set hp
         this.hp = 100;
-        this.hpBarBack = scene.add.rectangle(0, 0, this.displayWidth, 10, 0x000000, 1); this.hpBarBack.setDepth(3);
-        this.hpBarFront = scene.add.rectangle(0, 0, this.displayWidth, 5, 0x336633, 1);this.hpBarFront.setDepth(3);
+        this.hpBarBack = scene.add.rectangle(0, 0, this.displayWidth, 10, 0x000000, 1); this.hpBarBack.setDepth(SpriteLayer.HP);
+        this.hpBarFront = scene.add.rectangle(0, 0, this.displayWidth, 5, 0x336633, 1);this.hpBarFront.setDepth(SpriteLayer.HP);
         // Setup explosion effect
         this.explosion = scene.add.sprite(-9999, -9999, 'boom14');
         this.explosion.setScale(0.5);

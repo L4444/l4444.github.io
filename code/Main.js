@@ -4,7 +4,8 @@ var gameScreen = {
 };
 
 const SpriteLayer = {
-    UI: 3,
+    UI: 4,
+    HP:3,
     SHIP: 2,
     BULLETS: 1,
     PARALLAX: -1,

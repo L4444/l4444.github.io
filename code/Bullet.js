@@ -16,7 +16,7 @@ class Bullet extends Phaser.Physics.Arcade.Sprite {
        
 
         // The bullets should be under the ship but over the background layer.
-        this.setDepth(1);
+        this.setDepth(SpriteLayer.BULLETS);
 
         // Start disabled, ready to fire
         this.disable();

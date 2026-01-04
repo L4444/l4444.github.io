@@ -19,8 +19,8 @@ class GameScene extends Phaser.Scene {
 
 
     preload() {
-        this.load.image('player', 'ships/BigShip.png');
-        this.load.image('enemy1', 'ships/BigShip.png');
+        this.load.image('player', 'ships/Human-Fighter.png');
+        this.load.image('enemy1', 'ships/Alien-Cruiser.png');
         this.load.image('enemy2', 'ships/empire-d.png');
         this.load.image('enemy3', 'ships/empire-d.png');
         this.load.image('enemy4', 'ships/empire-d.png');
