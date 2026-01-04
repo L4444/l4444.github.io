@@ -51,10 +51,10 @@ class KeyboardAndMouseController
 
             let mb = this.scene.game.input.mousePointer.buttons;
             // Left click, fire weapon 1
-            if (mb == 1 || mb == 3) { myShip.shoot(1); }
+            if (mb == 1 || mb == 3) { myShip.shoot(0); }
 
             // Right click, fire weapon 2
-            if (mb == 2 || mb == 3) { myShip.shoot(2); }
+            if (mb == 2 || mb == 3) { myShip.shoot(1); }
 
 
             this.cursorPos.x = this.scene.game.input.mousePointer.x;

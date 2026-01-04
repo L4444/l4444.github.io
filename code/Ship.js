@@ -10,14 +10,6 @@ class Ship extends Phaser.Physics.Arcade.Sprite {
 
         this.spec = spec;
 
-       
-        
-/*
-        this.THRUST_SPEED = 200;
-        this.TURN_SPEED_FACTOR = 10;
-        this.MAX_SPEED = 500;
-        */
-
         this.controller = controller;
 
         // Particle thrust effect, put it here so it's z order puts it behind the actual ship sprite
@@ -104,7 +96,7 @@ class Ship extends Phaser.Physics.Arcade.Sprite {
 
         this.mg = scene.sound.add('mg', { loop: false });
         this.mg.volume =  0.1;
-        this.weaponSystems[1] = {
+        this.weaponSystems[0] = {
             spriteName: 'pew',
             speed: 1200,
             range: 100,
@@ -115,30 +107,24 @@ class Ship extends Phaser.Physics.Arcade.Sprite {
 
         this.pew = scene.sound.add('shoot2', { loop: false });
         this.pew.volume = 0.5;
-        this.weaponSystems[2] = {
+        this.weaponSystems[1] = {
             spriteName: 'bigPew',
-            speed: 600,
+            speed: 800,
             range: 150,
             refireDelay: 40,
             shootSound: this.pew,
             damageValue: 30
         }
 
-        for(var i = 1; i < this.weaponSystems.length; i++)
+        for(var i = 0; i < this.weaponSystems.length; i++)
         {
             this.weaponSystems[i].clock = 0;
             this.weaponSystems[i].lastTick = 0;
         }
     }
     shoot(weaponNumber) {
-
-        if(weaponNumber == 0)
-        {
-            throw new Error("weaponNumber cannot be 0. The first weapon is 1!");
-        }
-
+  
         let ws = this.weaponSystems[weaponNumber];
-
         if (ws.clock > ws.lastTick + ws.refireDelay) {
             ws.shootSound.play();
             this.scene.getBulletManager().shoot(this, ws);
@@ -255,7 +241,7 @@ class Ship extends Phaser.Physics.Arcade.Sprite {
 
 
         // Tick the clock (useful for limiting bullet firing)
-        for(var i = 1; i < this.weaponSystems.length; i++)
+        for(var i = 0; i < this.weaponSystems.length; i++)
         {
         this.weaponSystems[i].clock++;
         }

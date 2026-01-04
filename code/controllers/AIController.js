@@ -30,7 +30,7 @@ class AIController
 
         if(Phaser.Math.Distance.Between(p.x, p.y, this.scene.getPlayer().x, this.scene.getPlayer().y) < 500)
         {
-            p.shoot(2);
+            p.shoot(1);
         }
        
        
