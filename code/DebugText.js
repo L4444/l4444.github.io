@@ -32,7 +32,7 @@ class DebugText extends Phaser.GameObjects.Text {
       "3 for stealth music": "-",
       "4 for boss music": "-",
       "G to show/hide physics bodies": "-",
-      "F to enable/disable enemy AI": "-",
+      "F to enable/disable enemy AI | Active": this.scene.ships[1].isActive,
     };
 
     this.testVars[1] = {
@@ -50,7 +50,6 @@ class DebugText extends Phaser.GameObjects.Text {
       "Cursor Y (Screen)": this.scene.getPlayer().controller.cursorPos.y,
       "Player Boost": this.scene.getPlayer().isBoost,
       "Player Brake": this.scene.getPlayer().isBrake,
-      "Enemy AI Active?": this.scene.ships[1].isActive,
     };
 
     this.testVars[2] = {

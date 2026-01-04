@@ -208,11 +208,13 @@ class Ship extends Phaser.Physics.Arcade.Sprite {
       // If we are not braking, don't drag.
       this.body.setDrag(0, 0);
 
-      let boostMultiplier = 1;
+      let thrustBoost = 1;
+      let maxSpeedBoost = 1;
       if (this.isBoost) {
         this.tX = 0;
         this.tY = -1;
-        boostMultiplier = 4;
+        thrustBoost = 10;
+        maxSpeedBoost = 4;
         this.thruster.start();
         this.thruster.visible = true;
       } else {
@@ -229,8 +231,8 @@ class Ship extends Phaser.Physics.Arcade.Sprite {
       let v = new Phaser.Math.Vector2(this.tX, this.tY);
       v.normalize();
       v.rotate(Phaser.Math.DegToRad(this.angle));
-      v.scale(this.spec.THRUST_SPEED * boostMultiplier);
-      this.body.setMaxSpeed(this.spec.MAX_SPEED * boostMultiplier);
+      v.scale(this.spec.THRUST_SPEED * thrustBoost);
+      this.body.setMaxSpeed(this.spec.MAX_SPEED * maxSpeedBoost);
       this.setAcceleration(v.x, v.y); // Then Activate the thrusters!
     }
 
