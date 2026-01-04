@@ -95,14 +95,12 @@ class Ship extends Phaser.Physics.Arcade.Sprite {
     this.explosion = scene.add.sprite(-9999, -9999, "boom14");
     this.explosion.setScale(0.5);
 
-    this.tintTick = 255;
-
-    // Setup shield
-    // A test shield
+    // Setup shield, it should start invisible (alpha 0)
     this.shield = scene.add.sprite(0, 0, "shield");
     this.shield.displayWidth = this.displayWidth;
     this.shield.displayHeight = this.displayHeight;
     this.shield.setDepth(SpriteLayer.HP);
+    this.shield.alpha = 0;
 
     /// 100 range should be to the edge of the screen without scrolling
     this.weaponSystems = [];
@@ -169,20 +167,16 @@ class Ship extends Phaser.Physics.Arcade.Sprite {
 
   dealDamage(damageValue) {
     // Flicker the shield
-    this.tintTick = 0;
+    this.shield.alpha = 1;
 
     // Take the damage
     this.hp -= damageValue;
   }
 
   preUpdate(time, delta) {
-    this.tintTick += 5;
-
-    if (this.tintTick > 255) {
-      this.tintTick = 255;
+    if (this.shield.alpha > 0) {
+      this.shield.alpha -= 0.01;
     }
-
-    this.shield.alpha = (255 - this.tintTick) / 255;
 
     this.tX = 0;
     this.tY = 0;
