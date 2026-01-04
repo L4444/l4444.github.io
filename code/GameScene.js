@@ -71,6 +71,11 @@ class GameScene extends Phaser.Scene {
         this.load.audio('hitEnemySound', 'sounds/Laser_01.wav');
 
 
+        // Load data
+        this.load.json('playerData','data/ships/playerShip.json');
+        this.load.json('enemyData','data/ships/enemyShip.json');
+
+
 
 
         console.log("Preloading done");
@@ -130,22 +135,12 @@ class GameScene extends Phaser.Scene {
         this.statics.push(new Wall(this, 'red', 1000 - boundSize, 1000, wallThickness, boundSize * 2)); // Left
 
         // Ship specifications
-        var humanFighter =
-        {
-            spriteName: 'player',
-            THRUST_SPEED: 700,
-            TURN_SPEED_FACTOR: 80,
-            MAX_SPEED: 500
-        }
+      
+        var humanFighter = this.cache.json.get('playerData');
+        
 
-        var alienDestroyer =
-        {
-            spriteName: 'enemy1',
-            THRUST_SPEED: 400,
-            TURN_SPEED_FACTOR: 10,
-            MAX_SPEED: 300
-        }
-
+        var alienDestroyer =this.cache.json.get('enemyData');
+       
 
 
 

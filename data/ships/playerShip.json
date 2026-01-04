@@ -1,0 +1,6 @@
+  {
+    "spriteName": "player",
+    "THRUST_SPEED": 700,
+    "TURN_SPEED_FACTOR": 80,
+    "MAX_SPEED": 500
+  }

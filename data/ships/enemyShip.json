@@ -1,0 +1,6 @@
+  {
+    "spriteName": "enemy1",
+    "THRUST_SPEED": 700,
+    "TURN_SPEED_FACTOR": 10,
+    "MAX_SPEED": 50
+  }
