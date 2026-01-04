@@ -151,6 +151,17 @@ class Ship extends Phaser.Physics.Arcade.Sprite {
     brake() {
         this.isBrake = true;
     }
+
+    dealDamage(damageValue)
+    {
+        // Flicker the shield
+        this.tintTick = 0;
+
+        // Take the damage
+        this.hp -= damageValue;
+
+    }
+
     preUpdate(time, delta) {
         this.tintTick += 5;
 
