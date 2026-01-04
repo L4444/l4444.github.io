@@ -2,15 +2,15 @@ class Ship extends Phaser.Physics.Arcade.Sprite {
 
     static explosionSound;
 
-    constructor(scene, spriteName, x, y, controller, isEnemy) {
+    constructor(scene, spec, x, y, controller, isEnemy) {
 
-        super(scene, x, y, spriteName);
+        super(scene, x, y, spec.spriteName);
         this.setDepth(SpriteLayer.SHIP);
-        this.name = spriteName;
+        this.name = spec.spriteName;
 
-        this.THRUST_SPEED = 700;
-        this.TURN_SPEED_FACTOR = 80;
-        this.MAX_SPEED = 500;
+        this.spec = spec;
+
+       
         
 /*
         this.THRUST_SPEED = 200;
@@ -47,9 +47,7 @@ class Ship extends Phaser.Physics.Arcade.Sprite {
 
         this.isEnemy = isEnemy;
         if (isEnemy) {
-            this.TURN_SPEED_FACTOR = 20;
-            this.MAX_SPEED = 200;
-            this.THRUST_SPEED = 200;
+         
 
             // Disable enemy AI when testing
             this.isActive = false;
@@ -220,7 +218,7 @@ class Ship extends Phaser.Physics.Arcade.Sprite {
         if (this.isBrake) {
             this.body.setDrag(1000, 1000);
             this.setAcceleration(0, 0); // Then Activate the thrusters!
-            this.rotation = Phaser.Math.Angle.RotateTo(this.rotation, this.targetAngle, this.TURN_SPEED_FACTOR / 1000);
+            this.rotation = Phaser.Math.Angle.RotateTo(this.rotation, this.targetAngle, this.spec.TURN_SPEED_FACTOR / 1000);
         }
         else {
             this.body.setDrag(0, 0);
@@ -236,7 +234,7 @@ class Ship extends Phaser.Physics.Arcade.Sprite {
             else {
                 this.thruster.stop();
                 this.thruster.visible = false;
-                this.rotation = Phaser.Math.Angle.RotateTo(this.rotation, this.targetAngle, this.TURN_SPEED_FACTOR / 1000);
+                this.rotation = Phaser.Math.Angle.RotateTo(this.rotation, this.targetAngle, this.spec.TURN_SPEED_FACTOR / 1000);
 
             }
 
@@ -245,8 +243,8 @@ class Ship extends Phaser.Physics.Arcade.Sprite {
             let v = new Phaser.Math.Vector2(this.tX, this.tY);
             v.normalize();
             v.rotate(Phaser.Math.DegToRad(this.angle));
-            v.scale(this.THRUST_SPEED * boostMultiplier);
-            this.body.setMaxSpeed(this.MAX_SPEED * boostMultiplier);
+            v.scale(this.spec.THRUST_SPEED * boostMultiplier);
+            this.body.setMaxSpeed(this.spec.MAX_SPEED * boostMultiplier);
             this.setAcceleration(v.x, v.y); // Then Activate the thrusters!
 
 
@@ -284,6 +282,11 @@ class Ship extends Phaser.Physics.Arcade.Sprite {
     }
     rotateTo(targetAngle) {
         this.targetAngle = targetAngle;
+    }
+
+    getSpec()
+    {
+        return this.spec;
     }
 
 

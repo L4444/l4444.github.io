@@ -45,9 +45,9 @@ class DebugText extends Phaser.GameObjects.Text {
                         "2 for battle music" : "-",
                         "3 for stealth music": "-",
                         "4 for boss music": "-",
-                        "(LEFT / RIGHT) THRUST SPEED": this.scene.getPlayer().THRUST_SPEED,
-                        "(UP / DOWN) MAX SPEED" : this.scene.getPlayer().MAX_SPEED,
-                        "(Q / E) TURN SPEED FACTOR" : this.scene.getPlayer().TURN_SPEED_FACTOR,
+                        "(LEFT / RIGHT) THRUST SPEED": this.scene.getPlayer().getSpec().THRUST_SPEED,
+                        "(UP / DOWN) MAX SPEED" : this.scene.getPlayer().getSpec().MAX_SPEED,
+                        "(Q / E) TURN SPEED FACTOR" : this.scene.getPlayer().getSpec().TURN_SPEED_FACTOR,
                         "G to show/hide physics bodies" : "-",
                         "F to enable/disable enemy AI" : "-"
                     };
