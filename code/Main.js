@@ -3,6 +3,15 @@ var gameScreen = {
     height: 800
 };
 
+const SpriteLayer = {
+    UI: 4,
+    HP:3,
+    SHIP: 2,
+    BULLETS: 1,
+    PARALLAX: -1,
+    BACKGROUND: -2
+
+}
 
 var config = {
     type: Phaser.AUTO,

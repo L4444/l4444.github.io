@@ -9,6 +9,7 @@ class DebugText extends Phaser.GameObjects.Text {
         super(scene, x,y, 'This is debugtext');
         scene.add.existing(this);
         this.setScrollFactor(0);
+        this.setDepth(SpriteLayer.UI);  
 
         this.scene = scene;
 
