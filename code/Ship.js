@@ -48,15 +48,13 @@ class Ship extends Phaser.Physics.Arcade.Sprite {
 
     // TODO: tie the sounds to the weapons not the ship, then give enemies different weapons
     if (isEnemy) {
-      this.shootSound = scene.sound.add("shoot2", { loop: false });
+      //this.shootSound = scene.sound.add("shoot2", { loop: false });
       this.hitSound = scene.sound.add("hitEnemySound", { loop: false });
       this.hitSound.volume = 0.2;
     } else {
-      this.shootSound = scene.sound.add("shoot1", { loop: false });
+      //this.shootSound = scene.sound.add("shoot1", { loop: false });
       this.hitSound = scene.sound.add("hitPlayerSound", { loop: false });
     }
-
-    this.shootSound.volume = 0.3;
 
     // Manually add ship to scene and physics (contructor doesn't do this for us
     scene.add.existing(this);
@@ -89,8 +87,6 @@ class Ship extends Phaser.Physics.Arcade.Sprite {
     /// 100 range should be to the edge of the screen without scrolling
     this.weaponSystems = [];
 
-    this.mg = scene.sound.add("mg", { loop: false });
-    this.mg.volume = 0.1;
     this.weaponSystems[0] = {
       spriteName: "pew",
       speed: 1200,
@@ -101,8 +97,6 @@ class Ship extends Phaser.Physics.Arcade.Sprite {
       energyCost: 3,
     };
 
-    this.pew = scene.sound.add("shoot2", { loop: false });
-    this.pew.volume = 0.5;
     this.weaponSystems[1] = {
       spriteName: "bigPew",
       speed: 600,
@@ -113,27 +107,16 @@ class Ship extends Phaser.Physics.Arcade.Sprite {
       energyCost: 33,
     };
 
-    for (var i = 0; i < this.weaponSystems.length; i++) {
-      this.weaponSystems[i].clock = 0;
-      this.weaponSystems[i].lastTick = 0;
-    }
+    this.weapons = [];
+
+    this.weapons.push(new PlasmaCannon(scene, this));
 
     // Post update, the preUpdate() function calls BEFORE physics update so if I sync
     // the other elements (e.g. shield/thruster) they will lag slightly behind.
     scene.events.on("postupdate", this.postUpdate, this);
   }
   shoot(weaponNumber) {
-    let ws = this.weaponSystems[weaponNumber];
-
-    // Check if the weapon is on cooldown
-    if (ws.clock > ws.lastTick + ws.refireDelay) {
-      if (this.energy > ws.energyCost) {
-        ws.shootSound.play();
-        this.scene.getProjectileManager().shoot(this, ws);
-        ws.lastTick = ws.clock;
-        this.energy -= ws.energyCost;
-      }
-    }
+    this.weapons[0].use();
   }
   left() {
     this.tX += -1;
