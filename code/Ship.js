@@ -61,9 +61,7 @@ class Ship extends Phaser.Physics.Arcade.Sprite {
     scene.physics.add.existing(this);
 
     // -- Get the measurements of the ship spread and create a hit circle
-    let w = this.displayWidth;
-    let h = this.displayHeight;
-    this.body.setCircle(w / 2, 0, 0);
+    this.body.setCircle(this.displayWidth / 2, 0, 0);
     this.body.setBounce(2, 2); // Ships should bounce enough off each other to prevent "rubbing"
 
     // set hp
@@ -83,29 +81,6 @@ class Ship extends Phaser.Physics.Arcade.Sprite {
     this.shield.displayHeight = this.displayHeight;
     this.shield.setDepth(SpriteLayer.HP);
     this.shield.alpha = 0;
-
-    /// 100 range should be to the edge of the screen without scrolling
-    this.weaponSystems = [];
-
-    this.weaponSystems[0] = {
-      spriteName: "pew",
-      speed: 1200,
-      range: 300,
-      refireDelay: 2,
-      shootSound: this.mg,
-      damageValue: 2,
-      energyCost: 3,
-    };
-
-    this.weaponSystems[1] = {
-      spriteName: "bigPew",
-      speed: 600,
-      range: 300,
-      refireDelay: 5,
-      shootSound: this.pew,
-      damageValue: 10,
-      energyCost: 33,
-    };
 
     this.weapons = [];
 
@@ -216,11 +191,6 @@ class Ship extends Phaser.Physics.Arcade.Sprite {
       v.scale(this.spec.THRUST_SPEED * thrustBoost);
       this.body.setMaxSpeed(this.spec.MAX_SPEED * maxSpeedBoost);
       this.setAcceleration(v.x, v.y); // Then Activate the thrusters!
-    }
-
-    // Tick the clock (useful for limiting projectile firing)
-    for (var i = 0; i < this.weaponSystems.length; i++) {
-      this.weaponSystems[i].clock++;
     }
 
     // update hp bar
