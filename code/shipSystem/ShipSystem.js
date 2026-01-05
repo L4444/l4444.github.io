@@ -1,4 +1,4 @@
-class BaseShipSystem extends Phaser.GameObjects.GameObject {
+class ShipSystem extends Phaser.GameObjects.GameObject {
   constructor(scene, parent, cooldownDuration, reuseDelay) {
     super(scene);
 

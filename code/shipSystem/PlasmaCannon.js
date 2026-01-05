@@ -1,4 +1,4 @@
-class PlasmaCannon extends BaseShipSystem {
+class PlasmaCannon extends ShipSystem {
   constructor(scene, parent) {
     super(scene, parent, 100, 5);
 
