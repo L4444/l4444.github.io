@@ -7,8 +7,8 @@ class GameScene extends Phaser.Scene {
     return this.ships[0];
   }
 
-  getBulletManager() {
-    return this.bulletManager;
+  getProjectileManager() {
+    return this.projectileManager;
   }
 
   preload() {
@@ -36,8 +36,8 @@ class GameScene extends Phaser.Scene {
 
     this.load.image("flare", "particles/flare.png");
 
-    this.load.image("pew", "bullets/pew-yellow.png");
-    this.load.image("bigPew", "bullets/pew-big-green.png");
+    this.load.image("pew", "projectiles/pew-yellow.png");
+    this.load.image("bigPew", "projectiles/pew-big-green.png");
     this.load.image("red", "red.png");
 
     this.load.image("earth", "planets/Terran1.png");
@@ -317,12 +317,12 @@ class GameScene extends Phaser.Scene {
       this.scene.physics.world.debugGraphic.clear();
     });
 
-    this.bulletManager = new BulletManager(this);
+    this.projectileManager = new ProjectileManager(this);
 
     this.collisionManager = new CollisionManager(
       this,
       this.ships,
-      this.bulletManager,
+      this.projectileManager,
       this.statics
     );
 

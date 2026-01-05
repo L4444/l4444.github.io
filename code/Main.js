@@ -7,7 +7,7 @@ const SpriteLayer = {
   UI: 4,
   HP: 3,
   SHIP: 2,
-  BULLETS: 1,
+  PROJECTILES: 1,
   PARALLAX: -1,
   BACKGROUND: -2,
 };

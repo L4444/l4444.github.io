@@ -1,5 +1,5 @@
 class CollisionManager {
-  constructor(scene, ships, bulletManager, statics) {
+  constructor(scene, ships, projectileMananger, statics) {
     // 1) Check for ship to static (asteroid, wall etc.) collisions
     scene.physics.add.collider(
       ships,
@@ -19,24 +19,24 @@ class CollisionManager {
       }
     );
 
-    // 3) Check for ship to bullet collisions
+    // 3) Check for ship to projectile collisions
     scene.physics.add.overlap(
       ships,
-      bulletManager.getBullets(),
-      function (hitShip, hitBullet, body1, body2) {
-        if (hitShip != hitBullet.owner) {
-          hitShip.dealDamage(hitBullet.damage);
-          hitBullet.disable();
+      projectileMananger.getProjectiles(),
+      function (hitShip, hitProj, body1, body2) {
+        if (hitShip != hitProj.owner) {
+          hitShip.dealDamage(hitProj.damage);
+          hitProj.disable();
         }
       }
     );
 
-    // 4) Finally, check for bullet to static collisions.
+    // 4) Finally, check for projectile to static collisions.
     scene.physics.add.overlap(
       statics,
-      bulletManager.getBullets(),
-      function (hitStatic, hitBullet, body1, body2) {
-        hitBullet.disable();
+      projectileMananger.getProjectiles(),
+      function (hitStatic, hitProj, body1, body2) {
+        hitProj.disable();
       }
     );
   }

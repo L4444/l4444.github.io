@@ -129,7 +129,7 @@ class Ship extends Phaser.Physics.Arcade.Sprite {
     if (ws.clock > ws.lastTick + ws.refireDelay) {
       if (this.energy > ws.energyCost) {
         ws.shootSound.play();
-        this.scene.getBulletManager().shoot(this, ws);
+        this.scene.getProjectileManager().shoot(this, ws);
         ws.lastTick = ws.clock;
         this.energy -= ws.energyCost;
       }
@@ -234,7 +234,7 @@ class Ship extends Phaser.Physics.Arcade.Sprite {
       this.setAcceleration(v.x, v.y); // Then Activate the thrusters!
     }
 
-    // Tick the clock (useful for limiting bullet firing)
+    // Tick the clock (useful for limiting projectile firing)
     for (var i = 0; i < this.weaponSystems.length; i++) {
       this.weaponSystems[i].clock++;
     }
