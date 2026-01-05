@@ -1,22 +1,20 @@
 class PlasmaCannon extends ShipSystem {
   constructor(scene, parent) {
-    super(scene, parent, 100, 5);
+    super(scene, parent, "PlasmaCannon", 0.1, 10);
 
     this.pm = scene.getProjectileManager();
   }
 
   onActivate() {
-    console.log("Plasma Cannon Fired!");
-
     let projData = {
-      spriteName: "pew",
-      speed: 1200,
+      spriteName: "PlasmaCannon",
+      speed: 600,
       range: 300,
-      refireDelay: 2,
-      shootSound: this.mg,
-      damageValue: 2,
-      energyCost: 3,
+
+      damageValue: 10,
+      energyCost: 33,
     };
+
     this.pm.shoot(this.parent, projData);
   }
 }

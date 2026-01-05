@@ -36,8 +36,8 @@ class GameScene extends Phaser.Scene {
 
     this.load.image("flare", "particles/flare.png");
 
-    this.load.image("pew", "projectiles/pew-yellow.png");
-    this.load.image("bigPew", "projectiles/pew-big-green.png");
+    this.load.image("MachineGun", "projectiles/pew-yellow.png");
+    this.load.image("PlasmaCannon", "projectiles/pew-big-green.png");
     this.load.image("red", "red.png");
 
     this.load.image("earth", "planets/Terran1.png");
@@ -58,9 +58,9 @@ class GameScene extends Phaser.Scene {
     this.load.audio("boss", "music/Power Trip 3.mp3");
 
     // load shooting sounds
-    this.load.audio("shoot1", "sounds/alienshoot1.wav");
+    this.load.audio("PlasmaCannon", "sounds/alienshoot1.wav");
     this.load.audio("shoot2", "sounds/alienshoot2.wav");
-    this.load.audio("mg", "sounds/Futuristic SMG Single Shot.wav");
+    this.load.audio("MachineGun", "sounds/Futuristic SMG Single Shot.wav");
 
     // load all the explosion sounds
     for (let i = 0; i < 9; i++) {
@@ -178,6 +178,9 @@ class GameScene extends Phaser.Scene {
         boundSize * 2
       )
     ); // Left
+
+    // Create the projectileManager first so the ships can reference it.
+    this.projectileManager = new ProjectileManager(this);
 
     // Ship specifications
 
@@ -321,8 +324,6 @@ class GameScene extends Phaser.Scene {
       this.scene.shipSystem.use();
     });
 
-    this.projectileManager = new ProjectileManager(this);
-
     this.collisionManager = new CollisionManager(
       this,
       this.ships,
@@ -346,9 +347,6 @@ class GameScene extends Phaser.Scene {
     this.physics.world.drawDebug = false;
 
     console.log("Objects created");
-
-    // Testing ShipSystem classes
-    this.shipSystem = new PlasmaCannon(this, this.getPlayer());
   }
 
   update() {
